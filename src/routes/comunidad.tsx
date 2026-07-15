@@ -372,7 +372,7 @@ function CamionesTab() {
     { value: "ciro_104", label: "Av. Ciro Alegría 104", x: 175, y: 215, labelShort: "Ciro Alegría 104" },
   ];
 
-  const [casaSeleccionada, setCasaSeleccionada] = useState("diamantes_23");
+  const [casaSeleccionada, setCasaSeleccionada] = useState("");
   const [selectedDistance, setSelectedDistance] = useState<"100m" | "300m" | "500m">("300m");
   const [alarmActive, setAlarmActive] = useState(false);
   const [isLocating, setIsLocating] = useState(false);
@@ -380,12 +380,6 @@ function CamionesTab() {
 
   // Posición del Pin de Alarma (por defecto en Calle Los Diamantes / centro inferior)
   const [alarmPos, setAlarmPos] = useState({ x: 200, y: 338 });
-
-  // Progreso de simulación del camión (de 0 a 1)
-  const [progress, setProgress] = useState(0.05);
-
-  // Velocidad de simulación (animación activa): INICIA DETENIDO (0) por Heurística #3 (Control y libertad)
-  const [simSpeed, setSimSpeed] = useState<0 | 1 | 3>(0);
 
   // --- Drag & Pan del Mapa ---
   const [isDragging, setIsDragging] = useState(false);
@@ -430,40 +424,7 @@ function CamionesTab() {
     { x: 390, y: 338 }  // Sigue por Calle Los Diamantes hasta salir del mapa
   ];
 
-  // Interpolación de posición del camión
-  const getPointAtProgress = (p: number) => {
-    if (p <= 0) return routePoints[0];
-    if (p >= 1) return routePoints[routePoints.length - 1];
-    
-    const totalSegments = routePoints.length - 1;
-    const segmentProgress = p * totalSegments;
-    const segmentIndex = Math.floor(segmentProgress);
-    const localProgress = segmentProgress - segmentIndex;
-    
-    const start = routePoints[segmentIndex];
-    const end = routePoints[segmentIndex + 1];
-    
-    return {
-      x: start.x + (end.x - start.x) * localProgress,
-      y: start.y + (end.y - start.y) * localProgress
-    };
-  };
-
-  const truckPos = getPointAtProgress(progress);
-
-  // Loop de simulación
-  useEffect(() => {
-    if (simSpeed === 0) return;
-    
-    const interval = setInterval(() => {
-      setProgress((prev) => {
-        const next = prev + 0.003 * simSpeed;
-        return next >= 1 ? 0 : next;
-      });
-    }, 150);
-    
-    return () => clearInterval(interval);
-  }, [simSpeed]);
+  const truckPos = { x: 90, y: 220 };
 
   // Configuración de la geocerca: mapeo de distancia en metros a unidades SVG
   const distanceConfig = {
@@ -682,38 +643,16 @@ function CamionesTab() {
           )}
 
           {/* HOGARES ESTÁTICOS EN EL MAPA (Heurística #2) */}
-          {casas.map((c) => {
-            const active = c.value === casaSeleccionada;
+          {casaSeleccionada && casas.filter(c => c.value === casaSeleccionada).map((c) => {
             return (
               <g key={c.value}>
-                {active && (
-                  <circle
-                    cx={c.x}
-                    cy={c.y}
-                    r={18}
-                    fill="rgba(59, 130, 246, 0.25)"
-                    className="animate-ping"
-                  />
-                )}
                 <foreignObject x={c.x - 16} y={c.y - 22} width={32} height={40}>
                   <div className="flex flex-col items-center">
-                    <div 
-                      className={`w-7 h-7 rounded-full flex items-center justify-center shadow-lg border-2 border-white transition-all duration-300 ${
-                        active 
-                          ? "bg-blue-600 scale-110 shadow-blue-500/30 animate-pulse" 
-                          : "bg-blue-400/70 scale-90 opacity-70"
-                      }`}
-                    >
+                    <div className="w-7 h-7 rounded-full flex items-center justify-center shadow-lg border-2 border-white transition-all duration-300 bg-blue-600 scale-110 shadow-blue-500/30">
                       <Home size={12} className="text-white" />
                     </div>
-                    <div 
-                      className={`mt-0.5 text-[7px] font-black px-1 py-0.2 rounded shadow-sm whitespace-nowrap pointer-events-none ${
-                        active 
-                          ? "bg-blue-900 text-white" 
-                          : "bg-slate-100/95 text-slate-700 border border-slate-200 opacity-80"
-                      }`}
-                    >
-                      {active ? "Mi Hogar" : c.labelShort}
+                    <div className="mt-0.5 text-[7px] font-black px-1 py-0.2 rounded shadow-sm whitespace-nowrap pointer-events-none bg-blue-900 text-white">
+                      Mi Hogar
                     </div>
                   </div>
                 </foreignObject>
@@ -732,7 +671,7 @@ function CamionesTab() {
                       : "bg-orange-400 opacity-90"
                   }`}
                 >
-                  <Bell size={13} className={`text-white ${alarmTriggered ? "animate-bounce" : ""}`} fill="currentColor" />
+                  <Bell size={13} className="text-white" fill="currentColor" />
                 </div>
               </div>
             </foreignObject>
@@ -740,13 +679,6 @@ function CamionesTab() {
 
           {/* PIN DE CAMIÓN (Verde GPS) */}
           <g>
-            <circle
-              cx={truckPos.x}
-              cy={truckPos.y}
-              r={20}
-              fill="rgba(26, 148, 87, 0.25)"
-              className="animate-ping"
-            />
             <foreignObject x={truckPos.x - 18} y={truckPos.y - 18} width={36} height={36}>
               <div className="flex items-center justify-center h-full pointer-events-none">
                 <div className="w-8 h-8 rounded-full bg-[var(--gn-primary)] border-2 border-white flex items-center justify-center shadow-[0_0_12px_rgba(26,148,87,0.5)]">
@@ -808,13 +740,6 @@ function CamionesTab() {
                   >
                     Entendido
                   </button>
-                  <button
-                    type="button"
-                    onClick={() => setProgress(0.05)}
-                    className="bg-orange-200 hover:bg-orange-300 text-orange-950 text-[10px] font-bold px-3 py-1.5 rounded-lg transition-all"
-                  >
-                    Simular de nuevo
-                  </button>
                 </div>
               </div>
             </div>
@@ -851,11 +776,14 @@ function CamionesTab() {
                 <MapPin size={13} className="text-blue-500 shrink-0" />
                 <span>Mi Hogar</span>
               </div>
-              <Select value={casaSeleccionada} onValueChange={(val) => { setCasaSeleccionada(val); setPanOffset({ x: 0, y: 0 }); }}>
+              <Select value={casaSeleccionada || undefined} onValueChange={(val) => { setCasaSeleccionada(val === "none" ? "" : val); setPanOffset({ x: 0, y: 0 }); }}>
                 <SelectTrigger className="w-full h-8 bg-[var(--gn-card)] border-[var(--gn-border)] text-xs text-[var(--gn-base)] font-bold rounded-lg px-2 shadow-inner">
-                  <SelectValue placeholder="Dirección" />
+                  <SelectValue placeholder="Selecciona tu hogar" />
                 </SelectTrigger>
                 <SelectContent className="bg-[var(--gn-card)] border-[var(--gn-border-str)] text-[var(--gn-base)]">
+                  <SelectItem value="none" className="text-xs font-semibold focus:bg-[var(--gn-surface)] cursor-pointer text-slate-400">
+                    Deseleccionar hogar
+                  </SelectItem>
                   {casas.map((c) => (
                     <SelectItem key={c.value} value={c.value} className="text-xs font-semibold focus:bg-[var(--gn-surface)] cursor-pointer">
                       {c.labelShort}
@@ -907,59 +835,6 @@ function CamionesTab() {
                   );
                 })}
               </div>
-            </div>
-          </div>
-
-          {/* 4. Tarjeta del Estado del GPS y Controles de Simulación */}
-          <div className="bg-[var(--gn-surface)] border border-[var(--gn-border-str)] rounded-2xl p-3 shadow-inner flex flex-col gap-1.5">
-            <div className="flex justify-between items-center">
-              <div className="flex items-center gap-1.5 text-[9px] text-[var(--gn-sub)] font-bold uppercase tracking-wider">
-                <Truck size={13} className="text-[var(--gn-primary)] animate-pulse shrink-0" />
-                <span>Simulación de Avance GPS</span>
-              </div>
-              {/* Control de Velocidad Interactivo */}
-              <div className="flex items-center gap-0.5 bg-[var(--gn-card)] rounded-lg p-0.5 border border-[var(--gn-border)]">
-                {([
-                  { label: "⏸ Pausa", value: 0 },
-                  { label: "▶ 1x", value: 1 },
-                  { label: "▶ 3x", value: 3 },
-                ] as const).map((speed) => (
-                  <button
-                    key={speed.value}
-                    type="button"
-                    onClick={() => setSimSpeed(speed.value)}
-                    className={`px-2 py-1 flex items-center justify-center text-[10px] rounded font-bold cursor-pointer transition-all ${
-                      simSpeed === speed.value
-                        ? "bg-[var(--gn-primary)] text-white"
-                        : "text-[var(--gn-sub)] hover:bg-[var(--gn-surface)]"
-                    }`}
-                    title={`Velocidad ${speed.label}`}
-                  >
-                    {speed.label}
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            {/* Microtexto Dinámico de Heurísticas */}
-            <div className="flex flex-col gap-0.5">
-              <div className="flex justify-between text-xs font-black text-[var(--gn-base)]">
-                <span>Distancia al punto de aviso:</span>
-                <span className="text-[var(--gn-primary)] font-mono">
-                  {(distanceInMeters / 1000).toFixed(2)} km ({Math.round(distanceInMeters)} m)
-                </span>
-              </div>
-              <p className="text-[11px] text-[var(--gn-sub)] leading-tight font-medium">
-                {alarmActive ? (
-                  <span>
-                    El camión está a {(distanceInMeters / 1000).toFixed(2)} km. Te avisaremos cuando entre en tu radio de alerta (tiempo estimado para salir: <span className="font-bold text-[var(--gn-primary)]">{Math.ceil(distanceInMeters / 300)} minutos</span>).
-                  </span>
-                ) : (
-                  <span className="text-[var(--gn-hint)] italic">
-                    Configura la geocerca y presiona activar. Te notificaremos cuando el camión ingrese al radio de aviso.
-                  </span>
-                )}
-              </p>
             </div>
           </div>
 
