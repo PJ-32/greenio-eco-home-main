@@ -1,6 +1,13 @@
 import { BottomNav } from "../components/BottomNav";
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import {
   Home,
   BookOpen,
@@ -60,28 +67,30 @@ function Comunidad() {
   return (
     <div className="max-w-md mx-auto h-screen bg-[var(--gn-bg)] text-[var(--gn-base)] relative flex flex-col shadow-2xl overflow-hidden">
       
-      {/* 1. Top Tabs (Fijo en la parte superior) */}
-      <div className="pt-12 pb-2 px-4 border-b border-[var(--gn-border-str)] bg-[var(--gn-bg)] z-10 flex justify-between items-center shrink-0">
-        {([
-          ["ranking", "Ranking y Metas"],
-          ["reportes", "Reportes"],
-          ["camiones", "Camiones"],
-        ] as [Tab, string][]).map(([key, label]) => {
-          const active = tab === key;
-          return (
-            <button
-              key={key}
-              onClick={() => setTab(key)}
-              className={`text-xs font-semibold transition-colors pb-2 cursor-pointer ${
-                active
-                  ? "text-[var(--gn-primary)] font-bold border-b-2 border-[var(--gn-primary)]"
-                  : "text-[var(--gn-sub)]"
-              }`}
-            >
-              {label}
-            </button>
-          );
-        })}
+      {/* 1. Top Tabs (Segmented Control Rediseñado - Heurística #8) */}
+      <div className="pt-12 pb-3 px-4 bg-[var(--gn-bg)] border-b border-[var(--gn-border)] z-10 shrink-0 shadow-sm">
+        <div className="flex bg-[var(--gn-surface)] border border-[var(--gn-border-str)]/50 rounded-2xl p-1 gap-1 w-full shadow-inner">
+          {([
+            ["ranking", "Ranking y Metas"],
+            ["reportes", "Reportes"],
+            ["camiones", "Camiones"],
+          ] as [Tab, string][]).map(([key, label]) => {
+            const active = tab === key;
+            return (
+              <button
+                key={key}
+                onClick={() => setTab(key)}
+                className={`flex-1 text-center py-2 rounded-xl text-xs font-black transition-all cursor-pointer ${
+                  active
+                    ? "bg-[var(--gn-primary)] text-white shadow-md scale-[1.01]"
+                    : "text-[var(--gn-sub)] hover:bg-[var(--gn-card)]/50"
+                }`}
+              >
+                {label}
+              </button>
+            );
+          })}
+        </div>
       </div>
 
       {/* 2. Contenedor con Scroll */}
@@ -341,17 +350,141 @@ function ReportesTab() {
 }
 
 function CamionesTab() {
+  const casas = [
+    { value: "diamantes_23", label: "Calle Los Diamantes 23", x: 290, y: 300, labelShort: "Diamantes 23" },
+    { value: "sol_777", label: "Pasaje El Sol 777", x: 150, y: 115, labelShort: "Pje. El Sol 777" },
+    { value: "ciro_104", label: "Av. Ciro Alegría 104", x: 175, y: 215, labelShort: "Ciro Alegría 104" },
+  ];
+
+  const [casaSeleccionada, setCasaSeleccionada] = useState("diamantes_23");
   const [selectedDistance, setSelectedDistance] = useState<"100m" | "300m" | "500m">("300m");
   const [alarmActive, setAlarmActive] = useState(false);
   const [isLocating, setIsLocating] = useState(false);
   const [showLocationToast, setShowLocationToast] = useState(false);
+
+  // Posición del Pin de Alarma (por defecto en Calle Los Diamantes / centro inferior)
+  const [alarmPos, setAlarmPos] = useState({ x: 200, y: 338 });
+
+  // Progreso de simulación del camión (de 0 a 1)
+  const [progress, setProgress] = useState(0.05);
+
+  // Velocidad de simulación (animación activa): INICIA DETENIDO (0) por Heurística #3 (Control y libertad)
+  const [simSpeed, setSimSpeed] = useState<0 | 1 | 3>(0);
+
+  // --- Drag & Pan del Mapa ---
+  const [isDragging, setIsDragging] = useState(false);
+  const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
+  const [panOffset, setPanOffset] = useState({ x: 0, y: 0 });
+  // Referencia para saber si el gesto fue un arrastre real (para no mover el pin de alarma al hacer pan)
+  const hasDraggedRef = useRef(false);
+
+  // --- Tarjeta Colapsable (Bottom Sheet) ---
+  const [isCollapsed, setIsCollapsed] = useState(false);
+
+  // Manzanas del mapa vectorial
+  const blocks = [
+    // Fila 1 (Superior, arriba de Av. Argentina)
+    { x: 10, y: 10, w: 80, h: 50, name: "Minka" },
+    { x: 100, y: 10, w: 120, h: 50, name: "Almacenes" },
+    { x: 230, y: 10, w: 160, h: 50, name: "Zona Ind." },
+    
+    // Fila 2 (Entre Av. Argentina y Pje. El Sol)
+    { x: 10, y: 85, w: 80, h: 60, name: "Residencial A" },
+    { x: 100, y: 85, w: 100, h: 60, name: "Sector B-1" },
+    { x: 210, y: 85, w: 180, h: 60, name: "C.C. Bellavista" },
+    
+    // Fila 3 (Entre Pje. El Sol y Calle José Eguren)
+    { x: 10, y: 165, w: 80, h: 70, name: "Sector B-2" },
+    { x: 100, y: 165, w: 100, h: 70, name: "Colegio Callao" },
+    { x: 210, y: 165, w: 180, h: 70, isPark: true, name: "Parque Santa Teresita" },
+    
+    // Fila 4 (Entre Calle José Eguren y Calle Los Diamantes)
+    { x: 10, y: 255, w: 80, h: 70, name: "Residencial C" },
+    { x: 100, y: 255, w: 100, h: 70, name: "Mercado" },
+    { x: 210, y: 255, w: 180, h: 70, name: "Pasaje Los Olivos" }
+  ];
+
+  // Nodos del recorrido del camión recolector
+  const routePoints = [
+    { x: 205, y: 0 },
+    { x: 205, y: 152 }, // Baja por Ciro Alegría
+    { x: 90, y: 152 },  // Dobla a la izquierda en Pje. El Sol
+    { x: 90, y: 338 },  // Baja por Ricardo Palma
+    { x: 300, y: 338 }, // Dobla a la derecha en Calle Los Diamantes (pasa por la casa)
+    { x: 390, y: 338 }  // Sigue por Calle Los Diamantes hasta salir del mapa
+  ];
+
+  // Interpolación de posición del camión
+  const getPointAtProgress = (p: number) => {
+    if (p <= 0) return routePoints[0];
+    if (p >= 1) return routePoints[routePoints.length - 1];
+    
+    const totalSegments = routePoints.length - 1;
+    const segmentProgress = p * totalSegments;
+    const segmentIndex = Math.floor(segmentProgress);
+    const localProgress = segmentProgress - segmentIndex;
+    
+    const start = routePoints[segmentIndex];
+    const end = routePoints[segmentIndex + 1];
+    
+    return {
+      x: start.x + (end.x - start.x) * localProgress,
+      y: start.y + (end.y - start.y) * localProgress
+    };
+  };
+
+  const truckPos = getPointAtProgress(progress);
+
+  // Loop de simulación
+  useEffect(() => {
+    if (simSpeed === 0) return;
+    
+    const interval = setInterval(() => {
+      setProgress((prev) => {
+        const next = prev + 0.003 * simSpeed;
+        return next >= 1 ? 0 : next;
+      });
+    }, 150);
+    
+    return () => clearInterval(interval);
+  }, [simSpeed]);
+
+  // Configuración de la geocerca: mapeo de distancia en metros a unidades SVG
+  const distanceConfig = {
+    "100m": { radiusMeters: 100, radiusUnits: 25 },
+    "300m": { radiusMeters: 300, radiusUnits: 55 },
+    "500m": { radiusMeters: 500, radiusUnits: 85 },
+  };
+
+  // Cálculo de distancia euclidiana entre el camión y el Pin de Alarma
+  // (Asumiendo que 1 unidad de SVG son 3 metros para ajustar escala del mapa)
+  const dx = truckPos.x - alarmPos.x;
+  const dy = truckPos.y - alarmPos.y;
+  const distanceInMeters = Math.sqrt(dx * dx + dy * dy) * 3;
+
+  const currentCasa = casas.find((c) => c.value === casaSeleccionada) || casas[0];
+
+  // Vista dinámica del mapa (efecto de centrado y zoom + pan por arrastre - Heurísticas #2 y #7)
+  const zoomSize = 400; // zoom-out completo para ver todo el cuadrante del distrito
+  const basePanX = Math.max(0, Math.min(400 - zoomSize, currentCasa.x - zoomSize / 2));
+  const basePanY = Math.max(0, Math.min(500 - zoomSize * 1.25, currentCasa.y - zoomSize * 0.5));
+  // panOffset acumula el desplazamiento por arrastre del usuario
+  const viewBoxX = Math.max(-200, Math.min(400, basePanX - panOffset.x));
+  const viewBoxY = Math.max(-200, Math.min(500, basePanY - panOffset.y));
+  const currentViewBox = `${viewBoxX} ${viewBoxY} ${zoomSize} ${zoomSize * 1.25}`;
+
+  // Estado de alerta activada
+  const isInsideGeofence = distanceInMeters <= distanceConfig[selectedDistance].radiusMeters;
+  const alarmTriggered = alarmActive && isInsideGeofence;
 
   const handleFixLocation = () => {
     setIsLocating(true);
     setTimeout(() => {
       setIsLocating(false);
       setShowLocationToast(true);
-      setTimeout(() => setShowLocationToast(false), 2000);
+      // Mover la casa de vuelta a su coordenada predeterminada para el usuario
+      setCasaSeleccionada("diamantes_23");
+      setTimeout(() => setShowLocationToast(false), 2500);
     }, 1000);
   };
 
@@ -359,68 +492,267 @@ function CamionesTab() {
     setAlarmActive(!alarmActive);
   };
 
+  // Mapear clic del mouse respetando la vista de zoom activa del viewBox
+  // Solo reubica la alarma si no hubo arrastre real
+  const handleMapClick = (e: React.MouseEvent<SVGSVGElement>) => {
+    if (hasDraggedRef.current) return; // evitar clic accidental tras arrastrar
+    const svg = e.currentTarget;
+    const rect = svg.getBoundingClientRect();
+    const clickXPercent = (e.clientX - rect.left) / rect.width;
+    const clickYPercent = (e.clientY - rect.top) / rect.height;
+    const x = viewBoxX + clickXPercent * zoomSize;
+    const y = viewBoxY + clickYPercent * (zoomSize * 1.25);
+    setAlarmPos({ x: Math.round(x), y: Math.round(y) });
+  };
+
+  // --- Handlers de Drag & Pan (Mouse) ---
+  const handleMouseDown = (e: React.MouseEvent<SVGSVGElement>) => {
+    e.preventDefault();
+    setIsDragging(true);
+    hasDraggedRef.current = false;
+    setDragStart({ x: e.clientX, y: e.clientY });
+  };
+
+  const handleMouseMove = (e: React.MouseEvent<SVGSVGElement>) => {
+    if (!isDragging) return;
+    const dx = e.clientX - dragStart.x;
+    const dy = e.clientY - dragStart.y;
+    if (Math.abs(dx) > 3 || Math.abs(dy) > 3) hasDraggedRef.current = true;
+    // Convertir px de pantalla a unidades SVG (el viewBox tiene 400 unidades en ~screenWidth px)
+    const svgEl = e.currentTarget;
+    const rect = svgEl.getBoundingClientRect();
+    const scaleX = zoomSize / rect.width;
+    const scaleY = (zoomSize * 1.25) / rect.height;
+    setPanOffset((prev) => ({
+      x: prev.x + dx * scaleX,
+      y: prev.y + dy * scaleY,
+    }));
+    setDragStart({ x: e.clientX, y: e.clientY });
+  };
+
+  const handleMouseUp = () => {
+    setIsDragging(false);
+  };
+
+  // --- Handlers de Drag & Pan (Touch) ---
+  const handleTouchStart = (e: React.TouchEvent<SVGSVGElement>) => {
+    const touch = e.touches[0];
+    setIsDragging(true);
+    hasDraggedRef.current = false;
+    setDragStart({ x: touch.clientX, y: touch.clientY });
+  };
+
+  const handleTouchMove = (e: React.TouchEvent<SVGSVGElement>) => {
+    if (!isDragging) return;
+    const touch = e.touches[0];
+    const dx = touch.clientX - dragStart.x;
+    const dy = touch.clientY - dragStart.y;
+    if (Math.abs(dx) > 3 || Math.abs(dy) > 3) hasDraggedRef.current = true;
+    const svgEl = e.currentTarget;
+    const rect = svgEl.getBoundingClientRect();
+    const scaleX = zoomSize / rect.width;
+    const scaleY = (zoomSize * 1.25) / rect.height;
+    setPanOffset((prev) => ({
+      x: prev.x + dx * scaleX,
+      y: prev.y + dy * scaleY,
+    }));
+    setDragStart({ x: touch.clientX, y: touch.clientY });
+  };
+
+  const handleTouchEnd = () => {
+    setIsDragging(false);
+  };
+
   return (
     <div className="flex-1 flex flex-col overflow-hidden relative">
-      {/* Filter */}
-      <div className="px-4 py-3 shrink-0 z-10">
-        <button className="w-full bg-gn-card border border-[var(--gn-border-str)] rounded-xl px-3 py-2.5 flex items-center justify-between text-sm shadow-md">
-          <span className="text-[var(--gn-sub)]">
-            Distrito: <span className="text-[var(--gn-base)] font-medium">Callao (07041)</span>
-          </span>
-          <ChevronDown size={16} className="text-[var(--gn-base)]" />
+      {/* 1. Selector de Distrito Superior */}
+      <div className="px-4 py-2.5 shrink-0 z-10 bg-[var(--gn-bg)]/90 backdrop-blur-sm border-b border-[var(--gn-border)] flex items-center justify-between">
+        <div className="flex flex-col">
+          <span className="text-[10px] text-[var(--gn-sub)] font-bold uppercase tracking-wider">Distrito Activo</span>
+          <span className="text-sm font-black text-[var(--gn-base)]">Callao (07041)</span>
+        </div>
+        <button className="bg-gn-surface hover:bg-[var(--gn-border)] border border-[var(--gn-border-str)] rounded-xl px-3 py-1.5 flex items-center gap-1.5 text-xs text-[var(--gn-base)] font-bold transition-all">
+          <span>Cambiar</span>
+          <ChevronDown size={14} />
         </button>
       </div>
 
-      {/* Map */}
-      <div className="flex-1 bg-gn-card relative overflow-hidden">
-        {/* streets grid */}
-        <div className="absolute inset-0 bg-gn-card" />
-        <div className="absolute inset-0 opacity-40 bg-[linear-gradient(rgba(71,85,105,0.6)_1px,transparent_1px),linear-gradient(90deg,rgba(71,85,105,0.6)_1px,transparent_1px)] bg-[size:32px_32px]" />
-        <div className="absolute inset-0 opacity-20 bg-[linear-gradient(rgba(71,85,105,0.8)_2px,transparent_2px),linear-gradient(90deg,rgba(71,85,105,0.8)_2px,transparent_2px)] bg-[size:96px_96px]" />
+      {/* 2. Mapa Vectorial Simplificado */}
+      <div className="flex-1 bg-[#eef6f2] relative overflow-hidden">
+        {/* Contenedor del Mapa en SVG - con soporte de Drag & Pan */}
+        <svg
+          className={`absolute inset-0 w-full h-full select-none transition-[viewBox] duration-300 ease-out ${
+            isDragging ? "cursor-grabbing" : "cursor-grab"
+          }`}
+          viewBox={currentViewBox}
+          preserveAspectRatio="xMidYMid slice"
+          onClick={handleMapClick}
+          onMouseDown={handleMouseDown}
+          onMouseMove={handleMouseMove}
+          onMouseUp={handleMouseUp}
+          onMouseLeave={handleMouseUp}
+          onTouchStart={handleTouchStart}
+          onTouchMove={handleTouchMove}
+          onTouchEnd={handleTouchEnd}
+        >
+          {/* Manzanas (Blocks) */}
+          {blocks.map((b, index) => (
+            <g key={index}>
+              <rect
+                x={b.x}
+                y={b.y}
+                width={b.w}
+                height={b.h}
+                rx={6}
+                fill={b.isPark ? "#c8ebd5" : "#f5fbf8"}
+                stroke={b.isPark ? "#7dc4a0" : "#d1e5db"}
+                strokeWidth={1}
+                className="transition-colors duration-300"
+              />
+              <text
+                x={b.x + b.w / 2}
+                y={b.y + b.h / 2 + 3}
+                textAnchor="middle"
+                fill="#5a8f74"
+                className="text-[9px] font-bold pointer-events-none opacity-85 select-none"
+                style={{ fontFamily: "'Nunito', sans-serif" }}
+              >
+                {b.name}
+              </text>
+            </g>
+          ))}
 
-        {/* Mensaje Flotante Superior */}
-        <div className="absolute top-24 left-1/2 -translate-x-1/2 bg-gn-card backdrop-blur border border-[var(--gn-border-str)] text-xs px-4 py-2 rounded-full shadow-lg z-10 pointer-events-none whitespace-nowrap">
-          Toca la ruta para fijar el punto de aviso
-        </div>
+          {/* Rótulos de Calles / Avenidas */}
+          {/* Av. Argentina */}
+          <text x="200" y="73" textAnchor="middle" fill="#2d6a4a" className="text-[9px] font-black uppercase tracking-widest pointer-events-none select-none opacity-80">Av. Argentina</text>
+          
+          {/* Pasaje El Sol */}
+          <text x="150" y="154" textAnchor="middle" fill="#2d6a4a" className="text-[8px] font-bold pointer-events-none select-none opacity-75">Pje. El Sol</text>
+          
+          {/* Calle José Eguren */}
+          <text x="150" y="247" textAnchor="middle" fill="#2d6a4a" className="text-[8px] font-bold pointer-events-none select-none opacity-75">Ca. José Eguren</text>
 
-        {/* route line (SVG) */}
-        <svg className="absolute inset-0 w-full h-full" preserveAspectRatio="none" viewBox="0 0 100 100">
+          {/* Calle Los Diamantes */}
+          <text x="310" y="340" textAnchor="middle" fill="#2d6a4a" className="text-[9px] font-black uppercase pointer-events-none select-none opacity-80">Calle Los Diamantes</text>
+
+          {/* Calles Verticales (Rotadas) */}
+          <text x="92" y="290" transform="rotate(-90 92 290)" textAnchor="middle" fill="#2d6a4a" className="text-[8px] font-bold pointer-events-none select-none opacity-75">Ca. Ricardo Palma</text>
+          
+          <text x="207" y="295" transform="rotate(-90 207 295)" textAnchor="middle" fill="#2d6a4a" className="text-[9px] font-black uppercase tracking-wider pointer-events-none select-none opacity-80">Av. Ciro Alegría</text>
+
+          {/* Ruta Verde del Camión Recolector */}
           <path
-            d="M 5 80 L 25 80 L 25 50 L 55 50 L 55 25 L 90 25"
-            stroke="rgb(16,185,129)"
-            strokeWidth="1.5"
+            d={`M ${routePoints.map(p => `${p.x} ${p.y}`).join(' L ')}`}
+            stroke="#22c55e"
+            strokeWidth="5"
             fill="none"
             strokeLinecap="round"
             strokeLinejoin="round"
-            style={{ filter: "drop-shadow(0 0 4px rgb(16,185,129))" }}
+            className="opacity-90 drop-shadow-[0_0_4px_rgba(34,197,94,0.6)]"
           />
+
+          {/* Radio de la Geocerca (Alrededor del Pin de Alarma) */}
+          {alarmActive && (
+            <circle
+              cx={alarmPos.x}
+              cy={alarmPos.y}
+              r={distanceConfig[selectedDistance].radiusUnits}
+              fill="rgba(249, 115, 22, 0.12)"
+              stroke="rgba(249, 115, 22, 0.45)"
+              strokeWidth="1.5"
+              strokeDasharray="4,4"
+              className={`transition-all duration-300 ${alarmTriggered ? "animate-pulse fill-orange-500/20 stroke-orange-600" : ""}`}
+            />
+          )}
+
+          {/* HOGARES ESTÁTICOS EN EL MAPA (Heurística #2) */}
+          {casas.map((c) => {
+            const active = c.value === casaSeleccionada;
+            return (
+              <g key={c.value}>
+                {active && (
+                  <circle
+                    cx={c.x}
+                    cy={c.y}
+                    r={18}
+                    fill="rgba(59, 130, 246, 0.25)"
+                    className="animate-ping"
+                  />
+                )}
+                <foreignObject x={c.x - 16} y={c.y - 22} width={32} height={40}>
+                  <div className="flex flex-col items-center">
+                    <div 
+                      className={`w-7 h-7 rounded-full flex items-center justify-center shadow-lg border-2 border-white transition-all duration-300 ${
+                        active 
+                          ? "bg-blue-600 scale-110 shadow-blue-500/30 animate-pulse" 
+                          : "bg-blue-400/70 scale-90 opacity-70"
+                      }`}
+                    >
+                      <Home size={12} className="text-white" />
+                    </div>
+                    <div 
+                      className={`mt-0.5 text-[7px] font-black px-1 py-0.2 rounded shadow-sm whitespace-nowrap pointer-events-none ${
+                        active 
+                          ? "bg-blue-900 text-white" 
+                          : "bg-slate-100/95 text-slate-700 border border-slate-200 opacity-80"
+                      }`}
+                    >
+                      {active ? "Mi Hogar" : c.labelShort}
+                    </div>
+                  </div>
+                </foreignObject>
+              </g>
+            );
+          })}
+
+          {/* PIN DE ALARMA (Naranja) */}
+          <g>
+            <foreignObject x={alarmPos.x - 16} y={alarmPos.y - 16} width={32} height={32}>
+              <div className="flex items-center justify-center h-full pointer-events-none">
+                <div 
+                  className={`w-7 h-7 rounded-full border-2 border-white flex items-center justify-center shadow-md transition-all duration-300 ${
+                    alarmActive 
+                      ? "bg-orange-500 scale-105 shadow-orange-500/20" 
+                      : "bg-orange-400 opacity-90"
+                  }`}
+                >
+                  <Bell size={13} className={`text-white ${alarmTriggered ? "animate-bounce" : ""}`} fill="currentColor" />
+                </div>
+              </div>
+            </foreignObject>
+          </g>
+
+          {/* PIN DE CAMIÓN (Verde GPS) */}
+          <g>
+            <circle
+              cx={truckPos.x}
+              cy={truckPos.y}
+              r={20}
+              fill="rgba(26, 148, 87, 0.25)"
+              className="animate-ping"
+            />
+            <foreignObject x={truckPos.x - 18} y={truckPos.y - 18} width={36} height={36}>
+              <div className="flex items-center justify-center h-full pointer-events-none">
+                <div className="w-8 h-8 rounded-full bg-[var(--gn-primary)] border-2 border-white flex items-center justify-center shadow-[0_0_12px_rgba(26,148,87,0.5)]">
+                  <Truck size={14} className="text-white" />
+                </div>
+              </div>
+            </foreignObject>
+          </g>
         </svg>
 
-        {/* truck icon */}
-        <div className="absolute transition-all duration-1000" style={{ left: "52%", top: "46%" }}>
-          <div className="w-10 h-10 rounded-full bg-[var(--gn-primary)] flex items-center justify-center shadow-[0_0_20px_rgba(16,185,129,0.7)] /50 relative">
-            <span className="absolute inset-0 rounded-full bg-[var(--gn-primary)] animate-ping" />
-            <Truck size={20} className="text-[var(--gn-bg)] relative z-10" />
-          </div>
+        {/* Mensaje Informativo de Clic en el Mapa */}
+        <div className="absolute top-4 left-1/2 -translate-x-1/2 bg-gn-card/90 backdrop-blur border border-[var(--gn-border-str)] text-[10px] font-bold text-[var(--gn-base)] px-4 py-1.5 rounded-full shadow-md z-10 pointer-events-none whitespace-nowrap uppercase tracking-wide">
+          🔔 Toca el mapa para reubicar el punto de alarma
         </div>
 
-        {/* User Location Pin (Home icon in blue/white on path) */}
-        <div className={`absolute transition-all duration-500 ${isLocating ? "scale-125" : ""}`} style={{ left: "23%", top: "46%" }}>
-          <div className="relative">
-            <span className="absolute -inset-2 rounded-full bg-blue-500/20 animate-pulse" />
-            <div className="relative w-8 h-8 rounded-full bg-gn-card border border-blue-500 flex items-center justify-center shadow-[0_0_12px_rgba(59,130,246,0.6)]">
-              <Home size={14} className="text-blue-400" />
-            </div>
-          </div>
-        </div>
-
-        {/* Floating Locator Button (top right corner of map) */}
+        {/* Botón Flotante Localizador */}
         <button
           type="button"
           onClick={handleFixLocation}
           disabled={isLocating}
-          className="absolute top-4 right-4 bg-[var(--gn-surface)] border border-[var(--gn-border-str)] p-2 rounded-full shadow-lg hover:bg-[var(--gn-surface)] text-[var(--gn-sub)] hover:text-[var(--gn-base)] transition-all duration-300 z-10 active:scale-95 disabled:opacity-50"
-          title="Fijar mi ubicación"
+          className="absolute top-16 right-4 bg-gn-card border border-[var(--gn-border-str)] p-2.5 rounded-full shadow-lg hover:bg-gn-surface text-[var(--gn-primary)] hover:scale-105 transition-all duration-200 z-10 active:scale-95 disabled:opacity-50"
+          title="Fijar mi ubicación en Diamantes 23"
         >
           {isLocating ? (
             <Loader2 size={16} className="animate-spin text-[var(--gn-primary)]" />
@@ -429,87 +761,208 @@ function CamionesTab() {
           )}
         </button>
 
-        {/* Location Toast Notification */}
+        {/* Notificación Emergente de Ubicación Fijada */}
         {showLocationToast && (
-          <div className="absolute top-16 left-1/2 -translate-x-1/2 bg-gn-card border border-[var(--gn-border-str)] px-4 py-2 rounded-full z-30 shadow-2xl animate-in fade-in duration-200">
-            <p className="text-[10px] text-[var(--gn-primary)] font-bold uppercase tracking-wider">
-              Ubicación fijada correctamente
-            </p>
+          <div className="absolute top-16 left-1/2 -translate-x-1/2 bg-[var(--gn-primary)] text-white border border-[var(--gn-primary-dk)] px-4 py-2 rounded-full z-30 shadow-2xl animate-in fade-in zoom-in duration-200 flex items-center gap-1.5">
+            <span className="text-xs font-bold uppercase tracking-wider">
+              Ubicación establecida en Diamantes 23
+            </span>
           </div>
         )}
 
-        {/* Radio de alcance (Geocerca) */}
-        <div
-          className={`bg-[var(--gn-amber)] border border-[var(--gn-amber)]/30 rounded-full animate-pulse absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 transition-all duration-300 ${
-            selectedDistance === "100m"
-              ? "w-20 h-20"
-              : selectedDistance === "300m"
-              ? "w-32 h-32"
-              : "w-44 h-44"
-          }`}
-        />
-
-        {/* Pin de Alarma (El punto seleccionado por el usuario) */}
-        <div className="bg-[var(--gn-amber)] p-2 rounded-full text-[var(--gn-bg)] absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 z-10 shadow-lg">
-          <Bell size={16} fill="currentColor" />
-        </div>
-
-        {/* Bottom sheet */}
-        <div className="absolute bottom-16 w-full bg-gn-card border-t border-[var(--gn-border-str)] rounded-t-3xl p-6 z-20 shadow-[0_-8px_24px_rgba(0,0,0,0.5)]">
-          {/* Indicator handle */}
-          <div className="w-12 h-1 bg-[var(--gn-surface)] rounded-full mb-4 mx-auto" />
-
-          {/* Fila de Estado */}
-          <div className="flex justify-between items-center mb-4">
-            {/* Izquierda */}
-            <div className="flex items-center gap-2 text-sm text-[var(--gn-sub)]">
-              <Clock size={16} className="text-[var(--gn-base)]" />
-              <span>Horario: 20:00 - 22:00</span>
-            </div>
-            {/* Derecha */}
-            <span className="text-sm font-bold text-[var(--gn-primary)]">Distancia al punto: 1.2 km</span>
-          </div>
-
-          {/* Configuración de Alarma */}
-          <div className="mb-5">
-            <p className="text-sm text-[var(--gn-base)] mt-4 mb-3">
-              Sonar la alarma cuando el camión esté a:
-            </p>
-            {/* Selector de Distancia (Segmented Control) */}
-            <div className="flex bg-[var(--gn-bg)] rounded-xl p-1 gap-1 w-full mb-5">
-              {(["100m", "300m", "500m"] as const).map((dist) => {
-                const active = selectedDistance === dist;
-                return (
+        {/* BANNER DE NOTIFICACIÓN DE GEOCERCA DISPARADA */}
+        {alarmTriggered && (
+          <div className="absolute inset-x-4 top-14 bg-amber-50 border-2 border-orange-500 rounded-2xl p-4 shadow-2xl z-30 animate-in fade-in slide-in-from-top-4 duration-300">
+            <div className="flex gap-3">
+              <div className="bg-orange-500 text-white p-2 rounded-xl shrink-0 flex items-center justify-center w-10 h-10 shadow">
+                <Bell size={20} className="animate-bounce" />
+              </div>
+              <div className="flex-1 min-w-0">
+                <h4 className="text-xs font-black text-orange-950 uppercase tracking-wide flex items-center gap-1">
+                  <span>🚨 ¡Llegada Inminente!</span>
+                </h4>
+                <p className="text-[11px] text-orange-900 mt-1 leading-snug font-semibold">
+                  El camión recolector ingresó a tu radio de {selectedDistance}. Está a <span className="font-black text-orange-600 font-mono">{Math.round(distanceInMeters)}m</span> de tu alarma. ¡Es hora de sacar la basura!
+                </p>
+                <div className="flex gap-2 mt-2.5">
                   <button
-                    key={dist}
                     type="button"
-                    onClick={() => setSelectedDistance(dist)}
-                    className={
-                      active
-                        ? "bg-[var(--gn-surface)] text-[var(--gn-base)] font-bold py-2 flex-1 text-center rounded-lg text-sm border border-[var(--gn-border-str)] shadow"
-                        : "text-[var(--gn-base)] py-2 flex-1 text-center text-sm"
-                    }
+                    onClick={() => setAlarmActive(false)}
+                    className="bg-orange-600 hover:bg-orange-700 text-white text-[10px] font-black px-3 py-1.5 rounded-lg transition-all active:scale-95"
                   >
-                    {dist}
+                    Entendido
                   </button>
-                );
-              })}
+                  <button
+                    type="button"
+                    onClick={() => setProgress(0.05)}
+                    className="bg-orange-200 hover:bg-orange-300 text-orange-950 text-[10px] font-bold px-3 py-1.5 rounded-lg transition-all"
+                  >
+                    Simular de nuevo
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* 3. Panel de Control - Bottom Sheet Colapsable (Heurística #7 y #8) */}
+        <div
+          className={`absolute bottom-16 w-full bg-gn-card border-t border-[var(--gn-border-str)] rounded-t-3xl z-20 shadow-[0_-8px_24px_rgba(13,61,34,0.15)] flex flex-col transition-transform duration-300 ease-in-out ${
+            isCollapsed ? "translate-y-[calc(100%-48px)]" : "translate-y-0"
+          }`}
+        >
+          {/* Manija táctil – clic para colapsar/expandir */}
+          <button
+            type="button"
+            aria-label={isCollapsed ? "Expandir panel de control" : "Minimizar panel de control"}
+            onClick={() => setIsCollapsed((v) => !v)}
+            className="w-full flex flex-col items-center pt-3 pb-2 gap-1.5 cursor-pointer focus:outline-none"
+          >
+            <div className="w-12 h-1.5 bg-[var(--gn-border-str)] rounded-full" />
+            <span className="text-[9px] font-bold uppercase tracking-widest text-[var(--gn-sub)]">
+              {isCollapsed ? "▲ Mostrar panel" : "▼ Minimizar panel"}
+            </span>
+          </button>
+          <div className={`flex flex-col gap-3 px-5 pb-5 overflow-hidden transition-all duration-300 ${
+            isCollapsed ? "max-h-0 py-0" : "max-h-[600px]"
+          }`}>
+
+          {/* Grilla de Tarjetas Inferiores */}
+          <div className="grid grid-cols-2 gap-3">
+            {/* Tarjeta 1: Mi Ubicación (Selector) */}
+            <div className="bg-[var(--gn-surface)] border border-[var(--gn-border-str)] rounded-2xl p-3 flex flex-col gap-1.5 shadow-sm">
+              <div className="flex items-center gap-1.5 text-[10px] font-bold text-[var(--gn-sub)] uppercase tracking-wider">
+                <MapPin size={13} className="text-blue-500 shrink-0" />
+                <span>Mi Hogar</span>
+              </div>
+              <Select value={casaSeleccionada} onValueChange={(val) => { setCasaSeleccionada(val); setPanOffset({ x: 0, y: 0 }); }}>
+                <SelectTrigger className="w-full h-8 bg-[var(--gn-card)] border-[var(--gn-border)] text-xs text-[var(--gn-base)] font-bold rounded-lg px-2 shadow-inner">
+                  <SelectValue placeholder="Dirección" />
+                </SelectTrigger>
+                <SelectContent className="bg-[var(--gn-card)] border-[var(--gn-border-str)] text-[var(--gn-base)]">
+                  {casas.map((c) => (
+                    <SelectItem key={c.value} value={c.value} className="text-xs font-semibold focus:bg-[var(--gn-surface)] cursor-pointer">
+                      {c.labelShort}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+
+            {/* Tarjeta 2: Horario de Recojo */}
+            <div className="bg-[var(--gn-surface)] border border-[var(--gn-border-str)] rounded-2xl p-3 flex flex-col gap-1.5 shadow-sm">
+              <div className="flex items-center gap-1.5 text-[10px] font-bold text-[var(--gn-sub)] uppercase tracking-wider">
+                <Clock size={13} className="text-[var(--gn-primary)] shrink-0" />
+                <span>Horario Recojo</span>
+              </div>
+              <div className="text-xs font-black text-[var(--gn-base)] py-1 flex-1 flex items-center">
+                20:00 - 22:00
+              </div>
+            </div>
+
+            {/* Tarjeta 3: Configuración de Geocerca */}
+            <div className="bg-[var(--gn-surface)] border border-[var(--gn-border-str)] rounded-2xl p-3 flex flex-col gap-1.5 col-span-2 shadow-sm">
+              <div className="flex justify-between items-center text-[10px] font-bold text-[var(--gn-sub)] uppercase tracking-wider">
+                <div className="flex items-center gap-1.5">
+                  <Bell size={13} className="text-[var(--gn-amber)] shrink-0" />
+                  <span>Radio de Aviso Alarma</span>
+                </div>
+                <span className="text-[9px] font-extrabold bg-[var(--gn-amber)]/20 text-[var(--gn-amber)] px-1.5 py-0.5 rounded tracking-normal">
+                  {selectedDistance}
+                </span>
+              </div>
+              {/* Chips de Selección de Distancia */}
+              <div className="flex bg-[var(--gn-card)] border border-[var(--gn-border)] rounded-xl p-0.5 gap-1 mt-1">
+                {(["100m", "300m", "500m"] as const).map((dist) => {
+                  const active = selectedDistance === dist;
+                  return (
+                    <button
+                      key={dist}
+                      type="button"
+                      onClick={() => setSelectedDistance(dist)}
+                      className={`py-1.5 flex-1 text-center rounded-lg text-xs font-extrabold transition-all cursor-pointer ${
+                        active
+                          ? "bg-[var(--gn-primary)] text-white shadow border border-[var(--gn-primary-dk)]"
+                          : "text-[var(--gn-sub)] hover:bg-[var(--gn-surface)]"
+                      }`}
+                    >
+                      {dist}
+                    </button>
+                  );
+                })}
+              </div>
             </div>
           </div>
 
-          {/* Botón de Acción Principal */}
+          {/* 4. Tarjeta del Estado del GPS y Controles de Simulación */}
+          <div className="bg-[var(--gn-surface)] border border-[var(--gn-border-str)] rounded-2xl p-3 shadow-inner flex flex-col gap-1.5">
+            <div className="flex justify-between items-center">
+              <div className="flex items-center gap-1.5 text-[9px] text-[var(--gn-sub)] font-bold uppercase tracking-wider">
+                <Truck size={13} className="text-[var(--gn-primary)] animate-pulse shrink-0" />
+                <span>Simulación de Avance GPS</span>
+              </div>
+              {/* Control de Velocidad Interactivo */}
+              <div className="flex items-center gap-0.5 bg-[var(--gn-card)] rounded-lg p-0.5 border border-[var(--gn-border)]">
+                {([
+                  { label: "⏸ Pausa", value: 0 },
+                  { label: "▶ 1x", value: 1 },
+                  { label: "▶ 3x", value: 3 },
+                ] as const).map((speed) => (
+                  <button
+                    key={speed.value}
+                    type="button"
+                    onClick={() => setSimSpeed(speed.value)}
+                    className={`px-2 py-1 flex items-center justify-center text-[10px] rounded font-bold cursor-pointer transition-all ${
+                      simSpeed === speed.value
+                        ? "bg-[var(--gn-primary)] text-white"
+                        : "text-[var(--gn-sub)] hover:bg-[var(--gn-surface)]"
+                    }`}
+                    title={`Velocidad ${speed.label}`}
+                  >
+                    {speed.label}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Microtexto Dinámico de Heurísticas */}
+            <div className="flex flex-col gap-0.5">
+              <div className="flex justify-between text-xs font-black text-[var(--gn-base)]">
+                <span>Distancia al punto de aviso:</span>
+                <span className="text-[var(--gn-primary)] font-mono">
+                  {(distanceInMeters / 1000).toFixed(2)} km ({Math.round(distanceInMeters)} m)
+                </span>
+              </div>
+              <p className="text-[11px] text-[var(--gn-sub)] leading-tight font-medium">
+                {alarmActive ? (
+                  <span>
+                    El camión está a {(distanceInMeters / 1000).toFixed(2)} km. Te avisaremos cuando entre en tu radio de alerta (tiempo estimado para salir: <span className="font-bold text-[var(--gn-primary)]">{Math.ceil(distanceInMeters / 300)} minutos</span>).
+                  </span>
+                ) : (
+                  <span className="text-[var(--gn-hint)] italic">
+                    Configura la geocerca y presiona activar. Te notificaremos cuando el camión ingrese al radio de aviso.
+                  </span>
+                )}
+              </p>
+            </div>
+          </div>
+
+          {/* 5. Botón de Acción Principal (Toggle de Alarma) */}
           <button
             type="button"
             onClick={handleToggleAlarm}
-            className={`text-[var(--gn-bg)] font-black py-4 rounded-xl w-full flex justify-center items-center gap-2 transition duration-300 active:scale-[0.98] shadow-lg ${
+            className={`text-white font-black py-3.5 rounded-xl w-full flex justify-center items-center gap-2 transition-all duration-300 active:scale-[0.98] shadow-md cursor-pointer ${
               alarmActive
-                ? "bg-[var(--gn-primary)] hover:bg-[var(--gn-primary)] shadow-[var(--gn-primary)]-500/20"
-                : "bg-[var(--gn-amber)] hover:bg-amber-600 shadow-amber-500/20"
+                ? "bg-[var(--gn-coral)] hover:bg-orange-700 shadow-orange-500/20"
+                : "bg-[var(--gn-primary)] hover:bg-[var(--gn-primary-dk)] shadow-emerald-500/20"
             }`}
           >
             <Bell size={16} className={alarmActive ? "animate-bounce" : ""} />
-            {alarmActive ? "DESACTIVAR ALARMA" : "FIJAR PUNTO Y ACTIVAR"}
+            <span className="text-sm font-black uppercase tracking-wider">
+              {alarmActive ? "CANCELAR ALERTA ACTIVA" : "FIJAR PUNTO Y ACTIVAR"}
+            </span>
           </button>
+          </div>
         </div>
       </div>
     </div>

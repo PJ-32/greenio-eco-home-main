@@ -1,10 +1,10 @@
 import { Link, useRouterState } from "@tanstack/react-router";
-import { Home, BookOpen, Users, Award, Plus } from "lucide-react";
+import { Home, BookOpen, Users, Award, Plus, Radar } from "lucide-react";
 
 const links = [
   { to: "/",         icon: Home,     label: "Inicio"    },
   { to: "/aprende",  icon: BookOpen, label: "Aprende"   },
-  { to: "/comunidad",icon: Users,    label: "Comunidad" },
+  { to: "/comunidad",icon: Radar,    label: "Radar"     },
   { to: "/perfil",   icon: Award,    label: "Perfil"    },
 ];
 
