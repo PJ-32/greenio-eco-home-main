@@ -125,7 +125,7 @@ function EcoScan() {
         <div className="grid grid-cols-2 gap-3">
           {/* CO2 */}
           <div className="bg-[var(--gn-bg)] border border-[var(--gn-border-str)]/80 rounded-xl p-3 flex items-center gap-3">
-            <div className="w-9 h-9 rounded-lg bg-[var(--gn-primary)] flex items-center justify-center text-[var(--gn-primary)] shrink-0">
+            <div className="w-9 h-9 rounded-lg bg-[var(--gn-primary)] flex items-center justify-center text-white shrink-0">
               <Cloud size={18} />
             </div>
             <div className="min-w-0">
@@ -138,7 +138,7 @@ function EcoScan() {
 
           {/* Agua */}
           <div className="bg-[var(--gn-bg)] border border-[var(--gn-border-str)]/80 rounded-xl p-3 flex items-center gap-3">
-            <div className="w-9 h-9 rounded-lg bg-[var(--gn-primary)] flex items-center justify-center text-[var(--gn-primary)] shrink-0">
+            <div className="w-9 h-9 rounded-lg bg-[var(--gn-primary)] flex items-center justify-center text-white shrink-0">
               <Droplets size={18} />
             </div>
             <div className="min-w-0">

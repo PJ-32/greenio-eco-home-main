@@ -33,10 +33,10 @@ function Registra() {
       <div className="flex-1 overflow-y-auto scrollbar-hide px-4 pt-8 pb-24">
         {/* Header */}
         <header className="text-center">
-          <h1 className="text-3xl font-black tracking-wide bg-gradient-to-r from-white via-slate-100 to-slate-400 bg-clip-text text-transparent">
+          <h1 className="text-3xl font-black tracking-wide bg-gradient-to-r from-slate-900 via-slate-800 to-slate-700 bg-clip-text text-transparent">
             Registra
           </h1>
-          <p className="mt-2 text-sm text-[var(--gn-base)]">
+          <p className="mt-2 text-sm text-slate-700 font-medium">
             Registrar una acción sostenible cotidiana
           </p>
         </header>
@@ -60,7 +60,7 @@ function Registra() {
           <p className="text-[var(--gn-sub)] text-sm leading-relaxed max-w-[280px]">
             Escanea el residuo con tu cámara.
           </p>
-          <span className="text-[var(--gn-primary)] font-black text-xs uppercase tracking-wider bg-[var(--gn-primary)] border border-[var(--gn-primary)]/20 px-3 py-1 rounded-full animate-pulse">
+          <span className="text-emerald-800 font-black text-xs uppercase tracking-wider bg-emerald-50 border border-emerald-200/50 px-3 py-1 rounded-full animate-pulse">
             ¡Gana más puntos!
           </span>
 
@@ -85,7 +85,7 @@ function Registra() {
           <p className="text-[var(--gn-base)] text-sm leading-relaxed max-w-[280px]">
             Selecciona la característica y acción específica.
           </p>
-          <span className="text-[var(--gn-sub)] font-bold text-xs uppercase tracking-wider">
+          <span className="text-slate-700 font-bold text-xs uppercase tracking-wider">
             Gana puntos extra
           </span>
 

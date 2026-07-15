@@ -118,7 +118,7 @@ function RegistroHabito() {
               onClick={() => setAccion("luces")}
               className={`w-full text-left p-3 rounded-xl flex items-center justify-between transition border ${
                 accion === "luces"
-                  ? "bg-[var(--gn-primary)] border-[var(--gn-primary)]/30 text-[var(--gn-primary)] font-bold shadow-[0_0_12px_rgba(16,185,129,0.05)]"
+                  ? "bg-[var(--gn-primary)] border-[var(--gn-primary)]/30 text-white font-bold shadow-[0_0_12px_rgba(16,185,129,0.05)]"
                   : "bg-transparent border-transparent text-[var(--gn-sub)] hover:bg-[var(--gn-bg)]"
               }`}
             >
@@ -126,7 +126,7 @@ function RegistroHabito() {
                 <span className={`w-2 h-2 rounded-full ${accion === "luces" ? "bg-[#4ADE80]" : "bg-[var(--gn-surface)]"}`} />
                 <span className="text-xs">Apagar luces no usadas</span>
               </div>
-              {accion === "luces" && <Check size={14} className="text-[var(--gn-primary)]" />}
+              {accion === "luces" && <Check size={14} className="text-white" />}
             </button>
 
             {/* Opción 2 */}
@@ -134,7 +134,7 @@ function RegistroHabito() {
               onClick={() => setAccion("agua")}
               className={`w-full text-left p-3 rounded-xl flex items-center justify-between transition border ${
                 accion === "agua"
-                  ? "bg-[var(--gn-primary)] border-[var(--gn-primary)]/30 text-[var(--gn-primary)] font-bold shadow-[0_0_12px_rgba(16,185,129,0.05)]"
+                  ? "bg-[var(--gn-primary)] border-[var(--gn-primary)]/30 text-white font-bold shadow-[0_0_12px_rgba(16,185,129,0.05)]"
                   : "bg-transparent border-transparent text-[var(--gn-sub)] hover:bg-[var(--gn-bg)]"
               }`}
             >
@@ -142,7 +142,7 @@ function RegistroHabito() {
                 <span className={`w-2 h-2 rounded-full ${accion === "agua" ? "bg-[#4ADE80]" : "bg-[var(--gn-surface)]"}`} />
                 <span className="text-xs">Reducir uso de agua</span>
               </div>
-              {accion === "agua" && <Check size={14} className="text-[var(--gn-primary)]" />}
+              {accion === "agua" && <Check size={14} className="text-white" />}
             </button>
 
             {/* Opción 3 */}
@@ -150,7 +150,7 @@ function RegistroHabito() {
               onClick={() => setAccion("standby")}
               className={`w-full text-left p-3 rounded-xl flex items-center justify-between transition border ${
                 accion === "standby"
-                  ? "bg-[var(--gn-primary)] border-[var(--gn-primary)]/30 text-[var(--gn-primary)] font-bold shadow-[0_0_12px_rgba(16,185,129,0.05)]"
+                  ? "bg-[var(--gn-primary)] border-[var(--gn-primary)]/30 text-white font-bold shadow-[0_0_12px_rgba(16,185,129,0.05)]"
                   : "bg-transparent border-transparent text-[var(--gn-sub)] hover:bg-[var(--gn-bg)]"
               }`}
             >
@@ -158,7 +158,7 @@ function RegistroHabito() {
                 <span className={`w-2 h-2 rounded-full ${accion === "standby" ? "bg-[#4ADE80]" : "bg-[var(--gn-surface)]"}`} />
                 <span className="text-xs">Desconectar standby</span>
               </div>
-              {accion === "standby" && <Check size={14} className="text-[var(--gn-primary)]" />}
+              {accion === "standby" && <Check size={14} className="text-white" />}
             </button>
           </div>
         </section>
@@ -194,7 +194,7 @@ function RegistroHabito() {
 
               <div className="flex justify-between items-center text-xs border-b border-[var(--gn-border-str)]/60 pb-2">
                 <span className="text-[var(--gn-base)]">Impacto</span>
-                <span className="text-[var(--gn-primary)] font-bold bg-[var(--gn-primary)] px-2 py-0.5 rounded border border-[var(--gn-primary)]/20">
+                <span className="text-emerald-800 font-bold bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200/50">
                   Reducido
                 </span>
               </div>
