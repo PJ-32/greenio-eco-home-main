@@ -194,22 +194,38 @@ function ReportesTab() {
   return (
     <div className="flex-1 overflow-y-auto scrollbar-hide pb-24 px-4 pt-6">
       {/* Tarjeta 1: Mapa del Punto Crítico (h-48, rounded-2xl) */}
-      <section className="bg-[var(--gn-surface)] border border-[var(--gn-border-str)] rounded-2xl relative h-48 overflow-hidden shadow-lg">
-        {/* Imagen del mapa */}
-        <img
-          src={streetMapImg}
-          alt="Mapa del punto crítico"
-          className="absolute inset-0 w-full h-full object-cover opacity-70"
-        />
-        {/* Filtro oscuro sutil */}
-        <div className="absolute inset-0 bg-[var(--gn-bg)] backdrop-brightness-[0.8]" />
+      <section className="bg-[#eef6f2] border border-[var(--gn-border-str)] rounded-2xl relative h-48 overflow-hidden shadow-lg select-none">
+        {/* Mapa Vectorial Simplificado en SVG */}
+        <svg className="absolute inset-0 w-full h-full opacity-85" viewBox="0 0 300 150" preserveAspectRatio="xMidYMid slice">
+          {/* Manzanas (Blocks) en pasteles y verdes */}
+          <rect x="10" y="10" width="80" height="40" rx="6" fill="#f4faf6" stroke="#d5e8dc" strokeWidth="1.5" />
+          <rect x="100" y="10" width="100" height="40" rx="6" fill="#f4faf6" stroke="#d5e8dc" strokeWidth="1.5" />
+          <rect x="210" y="10" width="80" height="40" rx="6" fill="#f4faf6" stroke="#d5e8dc" strokeWidth="1.5" />
+
+          <rect x="10" y="60" width="80" height="40" rx="6" fill="#f4faf6" stroke="#d5e8dc" strokeWidth="1.5" />
+          <rect x="100" y="60" width="100" height="40" rx="6" fill="#d1eed9" stroke="#9adab1" strokeWidth="1.5" /> {/* Parque central */}
+          <rect x="210" y="60" width="80" height="40" rx="6" fill="#f4faf6" stroke="#d5e8dc" strokeWidth="1.5" />
+
+          <rect x="10" y="110" width="120" height="30" rx="6" fill="#f4faf6" stroke="#d5e8dc" strokeWidth="1.5" />
+          <rect x="140" y="110" width="150" height="30" rx="6" fill="#f4faf6" stroke="#d5e8dc" strokeWidth="1.5" />
+
+          {/* Avenidas / Calles */}
+          <line x1="0" y1="55" x2="300" y2="55" stroke="#e1f1e7" strokeWidth="10" />
+          <line x1="0" y1="105" x2="300" y2="105" stroke="#e1f1e7" strokeWidth="10" />
+          <line x1="95" y1="0" x2="95" y2="150" stroke="#e1f1e7" strokeWidth="10" />
+          <line x1="205" y1="0" x2="205" y2="150" stroke="#e1f1e7" strokeWidth="10" />
+
+          {/* Nombre de Calles */}
+          <text x="35" y="58" fill="#44735c" className="text-[6px] font-bold tracking-wide uppercase opacity-70">Av. Argentina</text>
+          <text x="225" y="108" fill="#44735c" className="text-[6px] font-bold tracking-wide uppercase opacity-70">Ca. Los Diamantes</text>
+        </svg>
 
         {/* Pin de ubicación rojo en el centro */}
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-10">
           <div className="relative">
-            <span className="absolute inset-0 rounded-full bg-gn-surface animate-ping" />
+            <span className="absolute inset-0 rounded-full bg-[#f87171] opacity-35 animate-ping" />
             <div className="relative w-10 h-10 rounded-full bg-[#f87171] flex items-center justify-center shadow-[0_0_15px_rgba(239,68,68,0.7)] ring-2 ring-white/10">
-              <MapPin size={22} className="text-[var(--gn-base)] animate-bounce" />
+              <MapPin size={22} className="text-white animate-bounce" />
             </div>
           </div>
         </div>
@@ -250,26 +266,26 @@ function ReportesTab() {
           {/* Dato 1: Vecinos */}
           <div className="flex flex-col bg-[var(--gn-bg)] border border-[var(--gn-border-str)]/60 rounded-2xl p-3.5 hover:scale-[1.03] transition-transform duration-300 shadow-inner">
             <div className="flex justify-between items-start">
-              <div className="p-2 bg-[var(--gn-primary)] rounded-lg text-[var(--gn-primary)]">
+              <div className="p-2 bg-[var(--gn-primary)] rounded-lg text-white">
                 <Users size={16} />
               </div>
-              <span className="bg-[var(--gn-primary)] text-[var(--gn-primary)] text-[8px] font-black tracking-wide px-1.5 py-0.5 rounded-full border border-[var(--gn-primary)]/20 uppercase">
+              <span className="bg-emerald-50 text-emerald-800 text-[8px] font-black tracking-wide px-1.5 py-0.5 rounded-full border border-emerald-200/50 uppercase">
                 Activa
               </span>
             </div>
-            <p className="text-2xl font-black font-mono text-[var(--gn-base)] mt-3 leading-none tracking-tight">15</p>
-            <p className="text-[10px] text-[var(--gn-base)] font-semibold mt-1">Vecinos activos</p>
+            <p className="text-2xl font-black font-mono text-slate-900 mt-3 leading-none tracking-tight">15</p>
+            <p className="text-[10px] text-slate-600 font-semibold mt-1">Vecinos activos</p>
           </div>
 
           {/* Dato 2: Toneladas */}
           <div className="flex flex-col bg-[var(--gn-bg)] border border-[var(--gn-border-str)]/60 rounded-2xl p-3.5 hover:scale-[1.03] transition-transform duration-300 shadow-inner">
             <div className="flex justify-between items-start">
-              <div className="p-2 bg-[var(--gn-primary)] rounded-lg text-[var(--gn-primary)]">
+              <div className="p-2 bg-[var(--gn-primary)] rounded-lg text-white">
                 <BarChart3 size={16} className="animate-pulse" />
               </div>
             </div>
-            <p className="text-2xl font-black font-mono text-[var(--gn-base)] mt-3 leading-none tracking-tight">5.2<span className="text-xs font-bold text-[var(--gn-primary)] ml-0.5">T</span></p>
-            <p className="text-[10px] text-[var(--gn-base)] font-semibold mt-1">Basura recogida</p>
+            <p className="text-2xl font-black font-mono text-slate-900 mt-3 leading-none tracking-tight">5.2<span className="text-xs font-bold text-slate-700 ml-0.5">T</span></p>
+            <p className="text-[10px] text-slate-600 font-semibold mt-1">Basura recogida</p>
             {/* Pequeña barra CSS */}
             <div className="h-1 bg-[var(--gn-bg)] rounded-full mt-2 w-full overflow-hidden border border-[var(--gn-card)]">
               <div className="h-full bg-[var(--gn-primary)] rounded-full w-[70%] shadow-[0_0_6px_rgba(16,185,129,0.5)]" />
@@ -279,23 +295,23 @@ function ReportesTab() {
           {/* Dato 3: CO2 Ahorrado */}
           <div className="flex flex-col bg-[var(--gn-bg)] border border-[var(--gn-border-str)]/60 rounded-2xl p-3.5 hover:scale-[1.03] transition-transform duration-300 shadow-inner">
             <div className="flex justify-between items-start">
-              <div className="p-2 bg-[var(--gn-primary)] rounded-lg text-[var(--gn-primary)]">
+              <div className="p-2 bg-[var(--gn-primary)] rounded-lg text-white">
                 <Cloud size={16} />
               </div>
             </div>
-            <p className="text-xl font-black font-mono text-[var(--gn-base)] mt-3 leading-none tracking-tight bg-gradient-to-r from-white to-emerald-400 bg-clip-text text-transparent">1,240<span className="text-[10px] font-bold text-[var(--gn-primary)] ml-0.5">kg</span></p>
-            <p className="text-[10px] text-[var(--gn-base)] font-semibold mt-1">CO₂ evitado en Callao</p>
+            <p className="text-xl font-black font-mono text-slate-900 mt-3 leading-none tracking-tight">1,240<span className="text-[10px] font-bold text-slate-700 ml-0.5">kg</span></p>
+            <p className="text-[10px] text-slate-600 font-semibold mt-1">CO₂ evitado en Callao</p>
           </div>
 
           {/* Dato 4: Puntos Resueltos */}
           <div className="flex flex-col bg-[var(--gn-bg)] border border-[var(--gn-border-str)]/60 rounded-2xl p-3.5 hover:scale-[1.03] transition-transform duration-300 shadow-inner">
             <div className="flex justify-between items-start">
-              <div className="p-2 bg-[var(--gn-primary)] rounded-lg text-[var(--gn-primary)]">
+              <div className="p-2 bg-[var(--gn-primary)] rounded-lg text-white">
                 <Activity size={16} />
               </div>
             </div>
-            <p className="text-2xl font-black font-mono text-[var(--gn-base)] mt-3 leading-none tracking-tight">18</p>
-            <p className="text-[10px] text-[var(--gn-base)] font-semibold mt-1">Puntos resueltos</p>
+            <p className="text-2xl font-black font-mono text-slate-900 mt-3 leading-none tracking-tight">18</p>
+            <p className="text-[10px] text-slate-600 font-semibold mt-1">Puntos resueltos</p>
           </div>
         </div>
       </section>
@@ -334,13 +350,13 @@ function ReportesTab() {
       <div className="mt-6 flex flex-col gap-3">
         <Link
           to="/retos"
-          className="bg-transparent border-2 border-[var(--gn-primary)] hover:bg-[var(--gn-primary)] text-[var(--gn-primary)] font-bold py-3.5 rounded-xl text-center text-sm transition duration-300 block w-full cursor-pointer"
+          className="bg-transparent border-2 border-[var(--gn-primary)] hover:bg-[var(--gn-primary)] text-[var(--gn-primary)] hover:text-white font-bold py-3.5 rounded-xl text-center text-sm transition duration-300 block w-full cursor-pointer"
         >
           Ver todos los retos activos
         </Link>
         <Link
           to="/reportar"
-          className="bg-[var(--gn-primary)] hover:bg-[#4ADE80] text-[var(--gn-bg)] font-bold py-3.5 rounded-xl text-center text-sm transition duration-300 shadow-lg shadow-[var(--gn-primary)]-500/20 active:scale-[0.98] block w-full cursor-pointer"
+          className="bg-[var(--gn-primary)] hover:bg-[#4ADE80] text-white font-bold py-3.5 rounded-xl text-center text-sm transition duration-300 shadow-lg shadow-[var(--gn-primary)]-500/20 active:scale-[0.98] block w-full cursor-pointer"
         >
           Reportar nuevo punto crítico
         </Link>

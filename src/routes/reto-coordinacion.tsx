@@ -27,9 +27,9 @@ function RetoCoordinacion() {
       <header className="z-10 bg-gn-card border-b border-[var(--gn-border-str)] p-4 pt-12 flex flex-col shrink-0">
         <div className="flex items-center gap-3">
           <Link
-            to="/reto-detalle"
-            search={{ id: "playa" }}
-            aria-label="Volver al detalle del reto"
+            to="/comunidad"
+            search={{ tab: "reportes" }}
+            aria-label="Volver a Comunidad"
             className="bg-[var(--gn-surface)] hover:bg-[var(--gn-surface)] p-2 rounded-full text-[var(--gn-sub)] hover:text-[var(--gn-base)] transition flex items-center justify-center cursor-pointer"
           >
             <ArrowLeft size={16} />
@@ -83,7 +83,7 @@ function RetoCoordinacion() {
               </div>
               <div className="flex flex-col gap-1 max-w-[80%]">
                 <span className="text-[10px] text-[var(--gn-base)] font-bold ml-1">Mario</span>
-                <div className="bg-gn-card border border-[var(--gn-border-str)]/80 rounded-2xl rounded-tl-none p-3 shadow-sm text-sm text-slate-100 leading-relaxed">
+                <div className="bg-gn-card border border-[var(--gn-border-str)]/80 rounded-2xl rounded-tl-none p-3 shadow-sm text-sm text-slate-800 leading-relaxed">
                   ¿Alguien tiene palas extra? Yo llevo 20 bolsas de basura.
                 </div>
               </div>
@@ -96,7 +96,7 @@ function RetoCoordinacion() {
               </div>
               <div className="flex flex-col gap-1 max-w-[80%]">
                 <span className="text-[10px] text-[var(--gn-base)] font-bold ml-1">Nicole</span>
-                <div className="bg-gn-card border border-[var(--gn-border-str)]/80 rounded-2xl rounded-tl-none p-3 shadow-sm text-sm text-slate-100 leading-relaxed">
+                <div className="bg-gn-card border border-[var(--gn-border-str)]/80 rounded-2xl rounded-tl-none p-3 shadow-sm text-sm text-slate-800 leading-relaxed">
                   Yo llevo una pala y guantes para 3 personas 🌿
                 </div>
               </div>
@@ -105,7 +105,7 @@ function RetoCoordinacion() {
             {/* Mensaje Propio */}
             <div className="flex flex-col gap-1 max-w-[80%] self-end">
               <span className="text-[10px] text-[var(--gn-primary)]/80 font-bold mr-1 text-right">Tú</span>
-              <div className="bg-[var(--gn-primary)] text-[var(--gn-base)] rounded-2xl rounded-tr-none p-3 shadow-[0_2px_8px_rgba(16,185,129,0.2)] text-sm leading-relaxed font-medium">
+              <div className="bg-[var(--gn-primary)] text-white rounded-2xl rounded-tr-none p-3 shadow-[0_2px_8px_rgba(16,185,129,0.2)] text-sm leading-relaxed font-medium">
                 Perfecto, nos vemos a las 9 AM en el paradero. Llevo agua para todos.
               </div>
             </div>
@@ -121,7 +121,7 @@ function RetoCoordinacion() {
                   <h3 className="text-xs font-bold text-[var(--gn-base)]">Traer bolsas de basura</h3>
                   <p className="text-[10px] text-[var(--gn-sub)] mt-0.5">Asignado a Mario</p>
                 </div>
-                <span className="text-[10px] bg-[var(--gn-primary)] text-[var(--gn-primary)] border border-[var(--gn-primary)]/20 px-2 py-0.5 rounded-full font-bold uppercase">
+                <span className="text-[10px] bg-emerald-50 text-emerald-800 border border-emerald-200/50 px-2 py-0.5 rounded-full font-bold uppercase">
                   Listo
                 </span>
               </div>
@@ -130,7 +130,7 @@ function RetoCoordinacion() {
                   <h3 className="text-xs font-bold text-[var(--gn-base)]">Traer herramientas/palas</h3>
                   <p className="text-[10px] text-[var(--gn-sub)] mt-0.5">Asignado a Nicole y Renzo</p>
                 </div>
-                <span className="text-[10px] bg-[var(--gn-primary)] text-[var(--gn-primary)] border border-[var(--gn-primary)]/20 px-2 py-0.5 rounded-full font-bold uppercase">
+                <span className="text-[10px] bg-emerald-50 text-emerald-800 border border-emerald-200/50 px-2 py-0.5 rounded-full font-bold uppercase">
                   Listo
                 </span>
               </div>
@@ -139,7 +139,7 @@ function RetoCoordinacion() {
                   <h3 className="text-xs font-bold text-[var(--gn-base)]">Proveer hidratación (Agua)</h3>
                   <p className="text-[10px] text-[var(--gn-sub)] mt-0.5">Asignado a Ti</p>
                 </div>
-                <span className="text-[10px] bg-[var(--gn-primary)] text-[var(--gn-primary)] border border-[var(--gn-primary)]/20 px-2 py-0.5 rounded-full font-bold uppercase">
+                <span className="text-[10px] bg-emerald-50 text-emerald-800 border border-emerald-200/50 px-2 py-0.5 rounded-full font-bold uppercase">
                   Listo
                 </span>
               </div>

@@ -248,7 +248,7 @@ function RetoDetailView() {
 
         {/* Caja de Recompensa */}
         <section className="bg-gn-card p-4 rounded-2xl border border-[var(--gn-primary)]/20 mt-6 flex gap-4 items-center">
-          <div className="w-12 h-12 rounded-xl bg-[var(--gn-primary)] flex items-center justify-center text-[var(--gn-primary)] shrink-0 border border-[var(--gn-primary)]/20 shadow-inner">
+          <div className="w-12 h-12 rounded-xl bg-[var(--gn-primary)] flex items-center justify-center text-white shrink-0 border border-[var(--gn-primary)]/20 shadow-inner">
             <Gift size={22} className="animate-pulse" />
           </div>
           <div className="flex-1 min-w-0">
@@ -267,7 +267,7 @@ function RetoDetailView() {
         {joined ? (
           <Link
             to="/reto-coordinacion"
-            className="bg-[var(--gn-primary)] hover:bg-[#4ADE80] text-[var(--gn-bg)] font-black py-4 rounded-2xl w-full text-center text-sm uppercase tracking-wider transition duration-300 active:scale-95 shadow-[0_4px_16px_rgba(16,185,129,0.4)] flex justify-center items-center gap-2"
+            className="bg-[var(--gn-primary)] hover:bg-[#4ADE80] text-white font-black py-4 rounded-2xl w-full text-center text-sm uppercase tracking-wider transition duration-300 active:scale-95 shadow-[0_4px_16px_rgba(16,185,129,0.4)] flex justify-center items-center gap-2"
           >
             <CheckCircle size={16} />
             Ir a Coordinación
@@ -276,7 +276,7 @@ function RetoDetailView() {
           <button
             onClick={handleJoinChallenge}
             disabled={isJoining}
-            className="bg-[var(--gn-primary)] hover:bg-[#4ADE80] text-[var(--gn-bg)] font-black py-4 rounded-2xl w-full text-center text-sm uppercase tracking-wider transition duration-300 active:scale-95 shadow-[0_4px_16px_rgba(16,185,129,0.4)] disabled:opacity-50 flex justify-center items-center gap-2"
+            className="bg-[var(--gn-primary)] hover:bg-[#4ADE80] text-white font-black py-4 rounded-2xl w-full text-center text-sm uppercase tracking-wider transition duration-300 active:scale-95 shadow-[0_4px_16px_rgba(16,185,129,0.4)] disabled:opacity-50 flex justify-center items-center gap-2"
           >
             {isJoining && <Loader2 size={16} className="animate-spin" />}
             {isJoining ? "Uniéndose..." : "Unirse al Reto"}
@@ -295,7 +295,7 @@ function RetoDetailView() {
             {/* Animación / Ícono Principal */}
             <div className="w-24 h-24 bg-[var(--gn-primary)] rounded-full flex items-center justify-center mb-2 relative shrink-0">
               <div className="absolute inset-0 rounded-full bg-[var(--gn-primary)] animate-ping" />
-              <div className="w-16 h-16 bg-[var(--gn-primary)] text-[var(--gn-bg)] rounded-full flex items-center justify-center shadow-lg relative z-10">
+              <div className="w-16 h-16 bg-[var(--gn-primary)] text-white rounded-full flex items-center justify-center shadow-lg relative z-10">
                 <Check size={28} strokeWidth={4} />
               </div>
             </div>
@@ -319,7 +319,7 @@ function RetoDetailView() {
             <button
               onClick={handleCloseModal}
               type="button"
-              className="bg-[var(--gn-primary)] hover:bg-[var(--gn-primary)] active:scale-95 text-[var(--gn-bg)] font-black py-4 rounded-xl w-full mt-6 transition duration-300 shadow-[0_4px_16px_rgba(16,185,129,0.3)] cursor-pointer"
+              className="bg-[var(--gn-primary)] hover:bg-[var(--gn-primary)] active:scale-95 text-white font-black py-4 rounded-xl w-full mt-6 transition duration-300 shadow-[0_4px_16px_rgba(16,185,129,0.3)] cursor-pointer"
             >
               ¡Entendido, a trabajar!
             </button>

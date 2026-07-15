@@ -84,22 +84,22 @@ function Perfil() {
         </section>
 
         {/* Saldo de puntos */}
-        <section className="bg-gradient-to-br from-emerald-900/40 to-slate-900 rounded-2xl p-4 border border-[var(--gn-primary)]/50 mt-4 relative overflow-hidden">
-          <div className="absolute -top-10 -right-10 w-40 h-40 rounded-full bg-[var(--gn-primary)] blur-2xl pointer-events-none" />
-          <p className="text-[var(--gn-sub)] text-sm relative">Saldo de Puntos</p>
-          <p className="text-3xl font-black text-[var(--gn-primary)] mt-1 relative">
-            {balance.toLocaleString()} <span className="text-lg font-bold">GPts</span>
+        <section className="bg-gradient-to-br from-[#1b3b2b] to-[#12221a] rounded-2xl p-4 border border-[var(--gn-primary)]/40 mt-4 relative overflow-hidden shadow-lg">
+          <div className="absolute -top-10 -right-10 w-40 h-40 rounded-full bg-[var(--gn-primary)]/20 blur-2xl pointer-events-none" />
+          <p className="text-emerald-200/90 text-xs font-bold uppercase tracking-wider relative">Saldo de Puntos</p>
+          <p className="text-3xl font-black text-amber-300 mt-1 relative">
+            {balance.toLocaleString()} <span className="text-lg font-bold text-white">GPts</span>
           </p>
-          <div className="mt-3 pt-3 border-t border-[var(--gn-border-str)]/50 flex justify-between relative">
+          <div className="mt-3 pt-3 border-t border-emerald-800/60 flex justify-between relative">
             <div>
-              <p className="text-xs text-[var(--gn-base)]">Verificados</p>
-              <p className="text-sm text-[var(--gn-primary)] flex items-center gap-1 mt-0.5 font-semibold">
-                <CheckCircle2 size={14} /> {verifiedPoints.toLocaleString()} GPts
+              <p className="text-[10px] text-emerald-200/60 font-semibold uppercase tracking-wider">Verificados</p>
+              <p className="text-sm text-emerald-300 flex items-center gap-1 mt-0.5 font-semibold">
+                <CheckCircle2 size={14} className="text-emerald-400" /> {verifiedPoints.toLocaleString()} GPts
               </p>
             </div>
             <div className="text-right">
-              <p className="text-xs text-[var(--gn-base)]">Manuales</p>
-              <p className="text-sm text-[var(--gn-base)] mt-0.5 font-semibold">
+              <p className="text-[10px] text-emerald-200/60 font-semibold uppercase tracking-wider">Manuales</p>
+              <p className="text-sm text-slate-100 mt-0.5 font-semibold">
                 {manualPoints.toLocaleString()} GPts
               </p>
             </div>
@@ -123,7 +123,7 @@ function Perfil() {
                 className={
                   "shrink-0 rounded-full px-4 py-1.5 text-xs font-semibold transition " +
                   (i === 0
-                    ? "bg-[var(--gn-primary)] text-[var(--gn-bg)]"
+                    ? "bg-[var(--gn-primary)] text-white"
                     : "bg-[var(--gn-surface)] text-[var(--gn-base)] hover:bg-[var(--gn-surface)]")
                 }
               >

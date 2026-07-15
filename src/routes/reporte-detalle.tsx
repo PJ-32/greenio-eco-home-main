@@ -74,7 +74,7 @@ function ReporteDetalle() {
 
         {/* Badge de Estado */}
         <div className="flex gap-2 items-center mt-3">
-          <span className="bg-[var(--gn-amber)] text-[var(--gn-amber)] text-[10px] font-bold px-2.5 py-1 rounded-full border border-[var(--gn-amber)]/20 uppercase tracking-wider">
+          <span className="bg-amber-50 text-amber-800 text-[10px] font-bold px-2.5 py-1 rounded-full border border-amber-200/50 uppercase tracking-wider">
             Bajo Revisión
           </span>
           <span className="bg-gn-surface text-[#f87171] text-[10px] font-bold px-2.5 py-1 rounded-full border border-[#f87171]/10 uppercase tracking-wider flex items-center gap-1">
@@ -153,7 +153,7 @@ function ReporteDetalle() {
         {/* Auditoría Sección */}
         <section className="bg-gn-card border border-[var(--gn-amber)]/20 rounded-2xl p-4 mt-4 flex flex-col gap-3 shadow-md">
           <div className="flex gap-3 items-center">
-            <div className="w-10 h-10 rounded-lg bg-[var(--gn-amber)] flex items-center justify-center text-[var(--gn-amber)] shrink-0 border border-[var(--gn-amber)]/20">
+            <div className="w-10 h-10 rounded-lg bg-[var(--gn-amber)] flex items-center justify-center text-white shrink-0 border border-[var(--gn-amber)]/20">
               <Sparkles size={18} className="animate-pulse" />
             </div>
             <div className="flex-1 min-w-0">
@@ -163,7 +163,7 @@ function ReporteDetalle() {
           </div>
           <Link
             to="/reto-verificacion"
-            className="bg-[var(--gn-amber)] hover:bg-[var(--gn-amber)] text-[var(--gn-bg)] text-xs font-bold py-2.5 rounded-xl text-center transition duration-300 block w-full shadow-[0_2px_8px_rgba(245,158,11,0.2)] active:scale-[0.98] cursor-pointer"
+            className="bg-[var(--gn-amber)] hover:bg-[#d97706] text-white text-xs font-bold py-2.5 rounded-xl text-center transition duration-300 block w-full shadow-[0_2px_8px_rgba(245,158,11,0.2)] active:scale-[0.98] cursor-pointer"
           >
             Verificar y ganar +10 GPts
           </Link>
