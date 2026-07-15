@@ -54,14 +54,14 @@ function Index() {
             </p>
           </div>
 
-          <div className="flex flex-col items-center shrink-0">
+          <Link to="/perfil" className="flex flex-col items-center shrink-0 hover:opacity-90 transition-opacity cursor-pointer">
             <div className="w-11 h-11 rounded-full bg-gn-card border-2 border-[var(--gn-border-str)] flex items-center justify-center text-[var(--gn-base)] shadow-md">
               <User size={20} />
             </div>
             <span className="mt-1.5 bg-[var(--gn-surface)] text-[var(--gn-base)] text-[10px] font-bold rounded-full px-2.5 py-0.5 border border-[var(--gn-border-str)]">
               Nivel: Brote
             </span>
-          </div>
+          </Link>
         </header>
 
         {/* 2. Tarjeta Ecosistema */}
@@ -147,7 +147,7 @@ function Index() {
 
         {/* 3. Acciones Rápidas */}
         <section className="grid grid-cols-3 gap-3 mt-5">
-          <Link to="/comunidad"
+          <Link to="/comunidad" search={{ tab: "camiones" }}
             className="bg-gn-card border border-[var(--gn-border-str)] rounded-2xl p-3 flex flex-col items-center text-center justify-between min-h-[110px] hover:border-[var(--gn-primary)] hover:shadow-md transition-all shadow-sm">
             <div className="w-9 h-9 rounded-xl bg-[var(--gn-bg)] border border-[var(--gn-border-str)] flex items-center justify-center text-[var(--gn-primary)]">
               <Truck size={17} />
@@ -156,7 +156,7 @@ function Index() {
             <p className="text-[9px] text-[var(--gn-hint)] mt-1 leading-tight">Próximo: 20 min</p>
           </Link>
 
-          <Link to="/comunidad"
+          <Link to="/reportar"
             className="bg-gn-card border border-[var(--gn-border-str)] rounded-2xl p-3 flex flex-col items-center text-center justify-between min-h-[110px] hover:border-[var(--gn-primary)] hover:shadow-md transition-all shadow-sm">
             <div className="w-9 h-9 rounded-xl bg-[var(--gn-bg)] border border-[var(--gn-border-str)] flex items-center justify-center text-[var(--gn-primary)]">
               <MapPin size={17} />
@@ -177,36 +177,45 @@ function Index() {
 
         {/* 4. Noticias */}
         <section className="mt-5">
-          <h2 className="font-bold text-sm text-[var(--gn-base)]">Noticias Ambientales</h2>
+          <div className="flex justify-between items-center mb-3">
+            <h2 className="font-bold text-sm text-[var(--gn-base)]">Noticias Ambientales</h2>
+            <Link to="/aprende" search={{ tab: "noticias" }} className="text-[11px] text-[var(--gn-primary-dk)] font-bold underline underline-offset-2">
+              Ver todas
+            </Link>
+          </div>
 
           <div className="flex gap-3 overflow-x-auto mt-3 pb-2 snap-x scrollbar-hide">
-            <article className="bg-gn-card rounded-2xl p-4 min-w-[230px] border border-[var(--gn-border-str)] snap-center shadow-sm">
-              <div className="flex justify-between items-center mb-2">
-                <span className="bg-[var(--gn-surface)] text-[var(--gn-base)] text-[9px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full border border-[var(--gn-border-str)]">
-                  Guía
-                </span>
-                <span className="flex items-center gap-1 text-[10px] text-[var(--gn-hint)]">
-                  <Clock size={10} /> 3 min
-                </span>
-              </div>
-              <h3 className="text-xs font-bold text-[var(--gn-base)] leading-snug mt-1">
-                Cómo reciclar plástico correctamente
-              </h3>
-            </article>
+            <Link to="/guia-practica" className="snap-center shrink-0">
+              <article className="bg-gn-card rounded-2xl p-4 min-w-[230px] border border-[var(--gn-border-str)] shadow-sm hover:shadow-md transition-all cursor-pointer">
+                <div className="flex justify-between items-center mb-2">
+                  <span className="bg-[var(--gn-surface)] text-[var(--gn-base)] text-[9px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full border border-[var(--gn-border-str)]">
+                    Guía
+                  </span>
+                  <span className="flex items-center gap-1 text-[10px] text-[var(--gn-hint)]">
+                    <Clock size={10} /> 3 min
+                  </span>
+                </div>
+                <h3 className="text-xs font-bold text-[var(--gn-base)] leading-snug mt-1">
+                  Cómo reciclar plástico correctamente
+                </h3>
+              </article>
+            </Link>
 
-            <article className="bg-gn-card rounded-2xl p-4 min-w-[230px] border border-[var(--gn-border-str)] snap-center shadow-sm">
-              <div className="flex justify-between items-center mb-2">
-                <span className="bg-[var(--gn-surface)] text-[var(--gn-base)] text-[9px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full border border-[var(--gn-border-str)]">
-                  Noticia
-                </span>
-                <span className="flex items-center gap-1 text-[10px] text-[var(--gn-hint)]">
-                  <Clock size={10} /> 2 min
-                </span>
-              </div>
-              <h3 className="text-xs font-bold text-[var(--gn-base)] leading-snug mt-1">
-                Lima reducirá plásticos en el mercado
-              </h3>
-            </article>
+            <Link to="/noticia" className="snap-center shrink-0">
+              <article className="bg-gn-card rounded-2xl p-4 min-w-[230px] border border-[var(--gn-border-str)] shadow-sm hover:shadow-md transition-all cursor-pointer">
+                <div className="flex justify-between items-center mb-2">
+                  <span className="bg-[var(--gn-surface)] text-[var(--gn-base)] text-[9px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full border border-[var(--gn-border-str)]">
+                    Noticia
+                  </span>
+                  <span className="flex items-center gap-1 text-[10px] text-[var(--gn-hint)]">
+                    <Clock size={10} /> 2 min
+                  </span>
+                </div>
+                <h3 className="text-xs font-bold text-[var(--gn-base)] leading-snug mt-1">
+                  Lima reducirá plásticos en el mercado
+                </h3>
+              </article>
+            </Link>
           </div>
         </section>
       </div>

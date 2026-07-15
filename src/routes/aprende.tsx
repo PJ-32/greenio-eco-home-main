@@ -1,12 +1,17 @@
 import { BottomNav } from "../components/BottomNav";
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   Leaf, Search, SlidersHorizontal, Trash2, Camera,
   Droplets, Sprout, ArrowLeft, Clock, ChevronRight,
 } from "lucide-react";
 
 export const Route = createFileRoute("/aprende")({
+  validateSearch: (search: Record<string, unknown>) => {
+    return {
+      tab: (search.tab as "main" | "guias" | "noticias") || "main",
+    };
+  },
   head: () => ({
     meta: [
       { title: "Aprende — Greenio" },
@@ -133,7 +138,14 @@ function ListadoNoticias() {
 
 /* ── Vista principal Aprende ── */
 function Aprende() {
-  const [vista, setVista] = useState<"main" | "guias" | "noticias">("main");
+  const { tab: initialTab } = Route.useSearch();
+  const [vista, setVista] = useState<"main" | "guias" | "noticias">(initialTab || "main");
+
+  useEffect(() => {
+    if (initialTab) {
+      setVista(initialTab);
+    }
+  }, [initialTab]);
 
   if (vista === "guias")    return <ListadoGuias />;
   if (vista === "noticias") return <ListadoNoticias />;
