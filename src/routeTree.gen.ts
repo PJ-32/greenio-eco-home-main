@@ -21,6 +21,7 @@ import { Route as PerfilRouteImport } from './routes/perfil'
 import { Route as NoticiaRouteImport } from './routes/noticia'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as HabitoRouteImport } from './routes/habito'
+import { Route as GuiaSegregacionRouteImport } from './routes/guia-segregacion'
 import { Route as GuiaPracticaRouteImport } from './routes/guia-practica'
 import { Route as ExitoRouteImport } from './routes/exito'
 import { Route as EcoscanRouteImport } from './routes/ecoscan'
@@ -89,6 +90,11 @@ const HabitoRoute = HabitoRouteImport.update({
   path: '/habito',
   getParentRoute: () => rootRouteImport,
 } as any)
+const GuiaSegregacionRoute = GuiaSegregacionRouteImport.update({
+  id: '/guia-segregacion',
+  path: '/guia-segregacion',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const GuiaPracticaRoute = GuiaPracticaRouteImport.update({
   id: '/guia-practica',
   path: '/guia-practica',
@@ -133,6 +139,7 @@ export interface FileRoutesByFullPath {
   '/ecoscan': typeof EcoscanRoute
   '/exito': typeof ExitoRoute
   '/guia-practica': typeof GuiaPracticaRoute
+  '/guia-segregacion': typeof GuiaSegregacionRoute
   '/habito': typeof HabitoRoute
   '/login': typeof LoginRoute
   '/noticia': typeof NoticiaRoute
@@ -154,6 +161,7 @@ export interface FileRoutesByTo {
   '/ecoscan': typeof EcoscanRoute
   '/exito': typeof ExitoRoute
   '/guia-practica': typeof GuiaPracticaRoute
+  '/guia-segregacion': typeof GuiaSegregacionRoute
   '/habito': typeof HabitoRoute
   '/login': typeof LoginRoute
   '/noticia': typeof NoticiaRoute
@@ -176,6 +184,7 @@ export interface FileRoutesById {
   '/ecoscan': typeof EcoscanRoute
   '/exito': typeof ExitoRoute
   '/guia-practica': typeof GuiaPracticaRoute
+  '/guia-segregacion': typeof GuiaSegregacionRoute
   '/habito': typeof HabitoRoute
   '/login': typeof LoginRoute
   '/noticia': typeof NoticiaRoute
@@ -199,6 +208,7 @@ export interface FileRouteTypes {
     | '/ecoscan'
     | '/exito'
     | '/guia-practica'
+    | '/guia-segregacion'
     | '/habito'
     | '/login'
     | '/noticia'
@@ -220,6 +230,7 @@ export interface FileRouteTypes {
     | '/ecoscan'
     | '/exito'
     | '/guia-practica'
+    | '/guia-segregacion'
     | '/habito'
     | '/login'
     | '/noticia'
@@ -241,6 +252,7 @@ export interface FileRouteTypes {
     | '/ecoscan'
     | '/exito'
     | '/guia-practica'
+    | '/guia-segregacion'
     | '/habito'
     | '/login'
     | '/noticia'
@@ -263,6 +275,7 @@ export interface RootRouteChildren {
   EcoscanRoute: typeof EcoscanRoute
   ExitoRoute: typeof ExitoRoute
   GuiaPracticaRoute: typeof GuiaPracticaRoute
+  GuiaSegregacionRoute: typeof GuiaSegregacionRoute
   HabitoRoute: typeof HabitoRoute
   LoginRoute: typeof LoginRoute
   NoticiaRoute: typeof NoticiaRoute
@@ -363,6 +376,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof HabitoRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/guia-segregacion': {
+      id: '/guia-segregacion'
+      path: '/guia-segregacion'
+      fullPath: '/guia-segregacion'
+      preLoaderRoute: typeof GuiaSegregacionRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/guia-practica': {
       id: '/guia-practica'
       path: '/guia-practica'
@@ -423,6 +443,7 @@ const rootRouteChildren: RootRouteChildren = {
   EcoscanRoute: EcoscanRoute,
   ExitoRoute: ExitoRoute,
   GuiaPracticaRoute: GuiaPracticaRoute,
+  GuiaSegregacionRoute: GuiaSegregacionRoute,
   HabitoRoute: HabitoRoute,
   LoginRoute: LoginRoute,
   NoticiaRoute: NoticiaRoute,

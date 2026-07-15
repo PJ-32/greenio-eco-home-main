@@ -38,15 +38,15 @@ function GuiaPractica() {
 
         {/* Botones top */}
         <div className="absolute top-0 left-0 right-0 flex justify-between items-center px-4 pt-5">
-          <Link to="/aprende"
-            className="w-9 h-9 bg-gn-card rounded-full flex items-center justify-center text-white border border-[var(--gn-border-str)]">
+          <Link to="/aprende" search={{ tab: "guias" }}
+            className="w-9 h-9 bg-gn-card rounded-full flex items-center justify-center text-slate-800 border border-[var(--gn-border-str)] cursor-pointer hover:scale-105 active:scale-95 transition">
             <ArrowLeft size={18} />
           </Link>
           <div className="flex gap-2">
-            <button className="w-9 h-9 bg-gn-card rounded-full flex items-center justify-center text-white border border-[var(--gn-border-str)]">
+            <button className="w-9 h-9 bg-gn-card rounded-full flex items-center justify-center text-slate-800 border border-[var(--gn-border-str)] cursor-pointer hover:scale-105 active:scale-95 transition">
               <BookmarkPlus size={16} />
             </button>
-            <button className="w-9 h-9 bg-gn-card rounded-full flex items-center justify-center text-white border border-[var(--gn-border-str)]">
+            <button className="w-9 h-9 bg-gn-card rounded-full flex items-center justify-center text-slate-800 border border-[var(--gn-border-str)] cursor-pointer hover:scale-105 active:scale-95 transition">
               <Share2 size={16} />
             </button>
           </div>
@@ -54,7 +54,7 @@ function GuiaPractica() {
 
         {/* Título sobre la imagen */}
         <div className="absolute bottom-4 left-4 right-4">
-          <span className="inline-block bg-gn-surface text-white text-[9px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full border border-[var(--gn-border-str)] mb-2">
+          <span className="inline-block bg-gn-surface text-slate-900 text-[9px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full border border-[var(--gn-border-str)] mb-2">
             Cuidado del Agua
           </span>
           <h1 className="text-white font-bold text-base leading-snug drop-shadow-md">

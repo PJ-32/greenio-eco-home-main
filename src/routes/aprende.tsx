@@ -54,8 +54,8 @@ function ListadoGuias() {
     <div className="max-w-md mx-auto h-screen bg-[var(--gn-bg)] text-[var(--gn-base)] relative overflow-hidden flex flex-col shadow-2xl">
       <div className="flex-1 overflow-y-auto scrollbar-hide pb-24 px-4 pt-6">
         <header className="flex items-center gap-3 mb-5">
-          <button onClick={() => navigate({ to: "/aprende" })}
-            className="w-9 h-9 rounded-full bg-gn-card border border-[var(--gn-border-str)] flex items-center justify-center text-[var(--gn-sub)] hover:text-[var(--gn-primary)] transition">
+          <button onClick={() => navigate({ to: "/aprende", search: { tab: "main" } })}
+            className="w-9 h-9 rounded-full bg-gn-card border border-[var(--gn-border-str)] flex items-center justify-center text-[var(--gn-sub)] hover:text-[var(--gn-primary)] transition cursor-pointer hover:scale-105 active:scale-95">
             <ArrowLeft size={18} />
           </button>
           <div>
@@ -99,8 +99,8 @@ function ListadoNoticias() {
     <div className="max-w-md mx-auto h-screen bg-[var(--gn-bg)] text-[var(--gn-base)] relative overflow-hidden flex flex-col shadow-2xl">
       <div className="flex-1 overflow-y-auto scrollbar-hide pb-24 px-4 pt-6">
         <header className="flex items-center gap-3 mb-5">
-          <button onClick={() => navigate({ to: "/aprende" })}
-            className="w-9 h-9 rounded-full bg-gn-card border border-[var(--gn-border-str)] flex items-center justify-center text-[var(--gn-sub)] hover:text-[var(--gn-primary)] transition">
+          <button onClick={() => navigate({ to: "/aprende", search: { tab: "main" } })}
+            className="w-9 h-9 rounded-full bg-gn-card border border-[var(--gn-border-str)] flex items-center justify-center text-[var(--gn-sub)] hover:text-[var(--gn-primary)] transition cursor-pointer hover:scale-105 active:scale-95">
             <ArrowLeft size={18} />
           </button>
           <div>
