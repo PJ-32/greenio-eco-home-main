@@ -1,6 +1,19 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState } from "react";
-import { ArrowLeft, Paperclip, Send, User } from "lucide-react";
+import {
+  ArrowLeft,
+  Paperclip,
+  Send,
+  User,
+  Users,
+  Shield,
+  ShieldAlert,
+  Phone,
+  ChevronRight,
+  Bell,
+  Flame,
+  HeartPulse,
+} from "lucide-react";
 
 export const Route = createFileRoute("/reto-coordinacion")({
   head: () => ({
@@ -17,9 +30,84 @@ export const Route = createFileRoute("/reto-coordinacion")({
 
 type Tab = "chat" | "tareas" | "detalles";
 
+interface AuthorityDetailProps {
+  icon: React.ReactNode;
+  iconBg: string;
+  title: string;
+  subtitle: string;
+  desc: string;
+  primaryBtn: string;
+  onPrimary: () => void;
+  onSecondary: () => void;
+}
+
+function AuthorityDetail({
+  icon,
+  iconBg,
+  title,
+  subtitle,
+  desc,
+  primaryBtn,
+  onPrimary,
+  onSecondary,
+}: AuthorityDetailProps) {
+  return (
+    <div className="flex-1 flex flex-col justify-between h-full py-4 text-center">
+      <div className="flex-1 flex flex-col items-center justify-center gap-4 my-auto">
+        <div className={`w-20 h-20 rounded-full flex items-center justify-center ${iconBg} shadow-sm`}>
+          {icon}
+        </div>
+        <div>
+          <h3 className="text-lg font-black text-slate-800">{title}</h3>
+          <p className="text-xs text-[var(--gn-primary)] font-bold mt-0.5">{subtitle}</p>
+        </div>
+        <p className="text-xs text-slate-500 max-w-[280px] leading-relaxed mt-2">
+          {desc}
+        </p>
+      </div>
+
+      <div className="flex flex-col gap-2.5 w-full max-w-xs mx-auto mt-6 shrink-0">
+        <button
+          type="button"
+          onClick={onPrimary}
+          className="bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3.5 px-6 rounded-xl w-full shadow-md transition cursor-pointer text-xs uppercase tracking-wider"
+        >
+          {primaryBtn}
+        </button>
+        <button
+          type="button"
+          onClick={onSecondary}
+          className="border border-slate-300 text-slate-700 font-bold py-3.5 px-6 rounded-xl w-full transition cursor-pointer hover:bg-slate-50 text-xs uppercase tracking-wider"
+        >
+          Enviar ubicación
+        </button>
+      </div>
+    </div>
+  );
+}
+
 function RetoCoordinacion() {
   const [activeTab, setActiveTab] = useState<Tab>("chat");
   const [messageText, setMessageText] = useState("");
+  const [helpStep, setHelpStep] = useState<null | string>(null);
+  const [toastMsg, setToastMsg] = useState("");
+
+  const showToast = (msg: string) => {
+    setToastMsg(msg);
+    setTimeout(() => {
+      setToastMsg("");
+    }, 3000);
+  };
+
+  const handleBackClick = () => {
+    if (helpStep === "MENU_INICIAL") {
+      setHelpStep(null);
+    } else if (helpStep === "LISTA_AUTORIDADES") {
+      setHelpStep("MENU_INICIAL");
+    } else {
+      setHelpStep("LISTA_AUTORIDADES");
+    }
+  };
 
   return (
     <div className="max-w-md mx-auto h-screen bg-[var(--gn-bg)] text-[var(--gn-base)] relative flex flex-col shadow-2xl overflow-hidden">
@@ -153,6 +241,16 @@ function RetoCoordinacion() {
                 </span>
               </div>
             </div>
+            
+            {/* Botón Disparador de Ayuda */}
+            <button
+              type="button"
+              onClick={() => setHelpStep("MENU_INICIAL")}
+              className="w-full mt-4 border-2 border-emerald-600 text-emerald-700 py-3 rounded-xl flex items-center justify-center gap-2 font-medium hover:bg-emerald-50 transition-colors cursor-pointer text-sm"
+            >
+              <Users size={18} />
+              <span>Solicitar ayuda</span>
+            </button>
           </div>
         )}
 
@@ -207,6 +305,220 @@ function RetoCoordinacion() {
             <Send size={16} />
           </button>
         </form>
+      )}
+      {/* Flow Modal Overlays */}
+      {helpStep && (
+        <div className="absolute inset-0 bg-[#fbfdfc] z-[60] flex flex-col animate-in slide-in-from-bottom duration-300 text-slate-800">
+          <header className="pt-12 px-4 pb-4 border-b border-slate-100 flex items-center gap-3 shrink-0 bg-white">
+            <button
+              type="button"
+              onClick={handleBackClick}
+              className="p-2 rounded-full bg-slate-50 border border-slate-200 text-slate-600 hover:text-slate-900 transition cursor-pointer"
+            >
+              <ArrowLeft size={16} />
+            </button>
+            <h2 className="text-sm font-bold text-slate-850">
+              {helpStep === "MENU_INICIAL" && "Solicitar Ayuda"}
+              {helpStep === "LISTA_AUTORIDADES" && "Autoridades de Emergencia"}
+              {helpStep === "DETALLE_POLICIA" && "Detalle: Policía Nacional"}
+              {helpStep === "DETALLE_BOMBEROS" && "Detalle: Cuerpo de Bomberos"}
+              {helpStep === "DETALLE_AMBULANCIA" && "Detalle: Ambulancia"}
+              {helpStep === "DETALLE_ALERTA" && "Detalle: Alerta Vecinal"}
+              {helpStep === "DETALLE_LLAMADA" && "Detalle: Llamada Rápida"}
+            </h2>
+          </header>
+
+          <div className="flex-1 overflow-y-auto p-5 flex flex-col">
+            {helpStep === "MENU_INICIAL" && (
+              <div className="flex-1 flex flex-col justify-center items-center text-center gap-5 my-auto">
+                <div className="relative w-24 h-24 flex items-center justify-center bg-emerald-50 rounded-full border border-emerald-100 text-emerald-600">
+                  <Shield size={48} className="absolute text-emerald-600/30" />
+                  <Phone size={28} className="relative z-10 text-emerald-700 animate-pulse" />
+                </div>
+                <h3 className="text-xl font-extrabold text-slate-855 leading-tight">¿En qué podemos ayudarte?</h3>
+                <p className="text-xs text-slate-500 max-w-[280px] leading-relaxed">
+                  Selecciona el tipo de ayuda que necesitas y te conectaremos con la autoridad correspondiente.
+                </p>
+                <div className="flex flex-col gap-2.5 w-full max-w-xs mt-4">
+                  <button
+                    type="button"
+                    onClick={() => setHelpStep("LISTA_AUTORIDADES")}
+                    className="bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3.5 px-6 rounded-xl w-full shadow-md transition cursor-pointer text-xs uppercase tracking-wider"
+                  >
+                    Ver autoridades
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setHelpStep("DETALLE_LLAMADA")}
+                    className="border-2 border-slate-200 text-slate-700 font-bold py-3.5 px-6 rounded-xl w-full transition cursor-pointer hover:bg-slate-50 text-xs uppercase tracking-wider"
+                  >
+                    Llamada rápida
+                  </button>
+                </div>
+              </div>
+            )}
+
+            {helpStep === "LISTA_AUTORIDADES" && (
+              <div className="flex flex-col gap-3">
+                <p className="text-xs text-slate-500 mb-2">
+                  Selecciona una entidad para ver detalles y opciones de contacto:
+                </p>
+
+                {/* Policía */}
+                <button
+                  type="button"
+                  onClick={() => setHelpStep("DETALLE_POLICIA")}
+                  className="flex items-center gap-4 p-4 bg-white border border-slate-200 rounded-2xl shadow-sm hover:border-slate-350 transition cursor-pointer text-left w-full"
+                >
+                  <div className="w-10 h-10 rounded-full bg-blue-50 border border-blue-100 flex items-center justify-center text-blue-600 shrink-0">
+                    <Shield size={18} />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <h4 className="text-xs font-bold text-slate-800">Policía Nacional (105)</h4>
+                    <p className="text-[10px] text-slate-500 mt-0.5">Seguridad y patrullaje</p>
+                  </div>
+                  <ChevronRight size={16} className="text-slate-400 shrink-0" />
+                </button>
+
+                {/* Bomberos */}
+                <button
+                  type="button"
+                  onClick={() => setHelpStep("DETALLE_BOMBEROS")}
+                  className="flex items-center gap-4 p-4 bg-white border border-slate-200 rounded-2xl shadow-sm hover:border-slate-350 transition cursor-pointer text-left w-full"
+                >
+                  <div className="w-10 h-10 rounded-full bg-red-50 border border-red-100 flex items-center justify-center text-red-600 shrink-0">
+                    <Flame size={18} />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <h4 className="text-xs font-bold text-slate-800">Bomberos (116)</h4>
+                    <p className="text-[10px] text-slate-500 mt-0.5">Incendios, rescates y urgencias</p>
+                  </div>
+                  <ChevronRight size={16} className="text-slate-400 shrink-0" />
+                </button>
+
+                {/* Ambulancia */}
+                <button
+                  type="button"
+                  onClick={() => setHelpStep("DETALLE_AMBULANCIA")}
+                  className="flex items-center gap-4 p-4 bg-white border border-slate-200 rounded-2xl shadow-sm hover:border-slate-350 transition cursor-pointer text-left w-full"
+                >
+                  <div className="w-10 h-10 rounded-full bg-emerald-50 border border-emerald-100 flex items-center justify-center text-emerald-600 shrink-0">
+                    <HeartPulse size={18} />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <h4 className="text-xs font-bold text-slate-800">Ambulancia (SAMU)</h4>
+                    <p className="text-[10px] text-slate-500 mt-0.5">Emergencias médicas y traslado</p>
+                  </div>
+                  <ChevronRight size={16} className="text-slate-400 shrink-0" />
+                </button>
+
+                {/* Alerta Vecinal */}
+                <button
+                  type="button"
+                  onClick={() => setHelpStep("DETALLE_ALERTA")}
+                  className="flex items-center gap-4 p-4 bg-white border border-slate-200 rounded-2xl shadow-sm hover:border-slate-350 transition cursor-pointer text-left w-full"
+                >
+                  <div className="w-10 h-10 rounded-full bg-amber-50 border border-amber-100 flex items-center justify-center text-amber-600 shrink-0">
+                    <Bell size={18} />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <h4 className="text-xs font-bold text-slate-800">Campana Alerta</h4>
+                    <p className="text-[10px] text-slate-500 mt-0.5">Notificar comunidad activa</p>
+                  </div>
+                  <ChevronRight size={16} className="text-slate-400 shrink-0" />
+                </button>
+
+                {/* Llamada */}
+                <button
+                  type="button"
+                  onClick={() => setHelpStep("DETALLE_LLAMADA")}
+                  className="flex items-center gap-4 p-4 bg-white border border-slate-200 rounded-2xl shadow-sm hover:border-slate-350 transition cursor-pointer text-left w-full"
+                >
+                  <div className="w-10 h-10 rounded-full bg-indigo-50 border border-indigo-100 flex items-center justify-center text-indigo-600 shrink-0">
+                    <Phone size={18} />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <h4 className="text-xs font-bold text-slate-800">Llamada de Emergencia</h4>
+                    <p className="text-[10px] text-slate-500 mt-0.5">Conexión directa Greenio</p>
+                  </div>
+                  <ChevronRight size={16} className="text-slate-400 shrink-0" />
+                </button>
+              </div>
+            )}
+
+            {helpStep === "DETALLE_POLICIA" && (
+              <AuthorityDetail
+                icon={<Shield size={48} className="text-blue-600" />}
+                iconBg="bg-blue-50 border border-blue-100"
+                title="Policía Nacional"
+                subtitle="Llamar a la Central de Emergencias (105)"
+                desc="Comunícate con la comisaría del sector para reportar incidentes de seguridad ciudadana, disturbios o solicitar patrullaje de apoyo."
+                primaryBtn="Llamar al 105"
+                onPrimary={() => showToast("Llamando a la Policía Nacional (105)...")}
+                onSecondary={() => showToast("Ubicación enviada: Callao (07041)")}
+              />
+            )}
+
+            {helpStep === "DETALLE_BOMBEROS" && (
+              <AuthorityDetail
+                icon={<Flame size={48} className="text-red-600" />}
+                iconBg="bg-red-50 border border-red-100"
+                title="Cuerpo de Bomberos"
+                subtitle="Llamar a la Central de Bomberos (116)"
+                desc="Solicita ayuda ante incendios, rescates, accidentes vehiculares, fugas de gas o cualquier urgencia mecánica de riesgo."
+                primaryBtn="Llamar al 116"
+                onPrimary={() => showToast("Llamando a la Central de Bomberos (116)...")}
+                onSecondary={() => showToast("Ubicación enviada: Callao (07041)")}
+              />
+            )}
+
+            {helpStep === "DETALLE_AMBULANCIA" && (
+              <AuthorityDetail
+                icon={<HeartPulse size={48} className="text-emerald-600" />}
+                iconBg="bg-emerald-50 border border-emerald-100"
+                title="Ambulancia (SAMU / EsSalud)"
+                subtitle="Emergencias Médicas y Traslado"
+                desc="Pide el envío de una ambulancia médica de urgencia para atención ambulatoria inmediata o traslado rápido a clínicas/hospitales."
+                primaryBtn="Llamar Ambulancia"
+                onPrimary={() => showToast("Llamando a Emergencias Médicas (SAMU)...")}
+                onSecondary={() => showToast("Ubicación enviada: Callao (07041)")}
+              />
+            )}
+
+            {helpStep === "DETALLE_ALERTA" && (
+              <AuthorityDetail
+                icon={<Bell size={48} className="text-amber-600" />}
+                iconBg="bg-amber-50 border border-amber-100"
+                title="Notificar Vecinos"
+                subtitle="Alerta de Emergencia Comunitaria"
+                desc="Se notificará a los vecinos activos que se encuentran participando en este reto para que acudan a brindar soporte colectivo."
+                primaryBtn="Activar alerta"
+                onPrimary={() => showToast("Alerta enviada a Nicole, Renzo, Mario y vecinos activos.")}
+                onSecondary={() => showToast("Ubicación enviada: Callao (07041)")}
+              />
+            )}
+
+            {helpStep === "DETALLE_LLAMADA" && (
+              <AuthorityDetail
+                icon={<Phone size={48} className="text-indigo-600" />}
+                iconBg="bg-indigo-50 border border-indigo-100"
+                title="Llamada de Emergencia"
+                subtitle="Contacto de Emergencia Único"
+                desc="Establece comunicación directa de voz con la central de coordinación general de Greenio para soporte vecinal de contingencia."
+                primaryBtn="Iniciar llamada de voz"
+                onPrimary={() => showToast("Iniciando llamada de emergencia directa con Greenio...")}
+                onSecondary={() => showToast("Ubicación enviada: Callao (07041)")}
+              />
+            )}
+          </div>
+        </div>
+      )}
+
+      {/* Global Toast Message */}
+      {toastMsg && (
+        <div className="fixed bottom-6 left-1/2 -translate-x-1/2 bg-slate-900 text-white text-xs font-bold px-5 py-3.5 rounded-full z-[100] shadow-2xl flex items-center gap-1.5 animate-in fade-in slide-in-from-bottom-4 duration-300 max-w-[90%] text-center border border-slate-800">
+          <span>{toastMsg}</span>
+        </div>
       )}
     </div>
   );

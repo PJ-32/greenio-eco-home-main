@@ -13,7 +13,7 @@ export function BottomNav() {
 
   return (
     <nav
-      className="absolute bottom-0 w-full px-4 py-2.5 flex justify-between items-center z-50"
+      className="fixed bottom-0 left-0 right-0 z-50 max-w-md mx-auto px-4 py-2.5 flex justify-between items-center"
       style={{
         backgroundColor: "var(--gn-nav)",
         borderTop: "1.5px solid var(--gn-nav-border)",

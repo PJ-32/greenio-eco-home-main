@@ -160,7 +160,7 @@ function Perfil() {
                 icon={<Music size={26} className="text-fuchsia-400" />}
                 title="Sorteo: Entrada a Concierto Local"
                 subtitle="Participa por entradas a música en vivo"
-                cost="800 GPts"
+                cost="2000 GPts"
               />
               <RewardCard
                 icon={<Gamepad2 size={26} className="text-indigo-400" />}

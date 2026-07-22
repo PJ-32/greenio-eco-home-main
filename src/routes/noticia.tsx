@@ -2,8 +2,7 @@ import { BottomNav } from "../components/BottomNav";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import {
   ArrowLeft, Clock, Share2, BookmarkPlus,
-  ChevronRight, TrendingDown, Recycle, Leaf,
-  Home, BookOpen, Users, Award, Plus,
+  ChevronRight, TrendingDown, Recycle, Leaf, ExternalLink,
 } from "lucide-react";
 
 export const Route = createFileRoute("/noticia")({
@@ -18,42 +17,39 @@ function Noticia() {
     <div className="max-w-md mx-auto h-screen relative overflow-hidden flex flex-col shadow-2xl"
       style={{ background: "linear-gradient(160deg, #f3e5f5 0%, #e8eaf6 40%, #e0f2f1 100%)" }}>
 
-      {/* Portada */}
-      <div className="relative h-52 shrink-0 overflow-hidden"
-        style={{ background: "linear-gradient(135deg, #283593 0%, #1565c0 40%, #00695c 100%)" }}>
-        <div className="absolute inset-0 flex items-center justify-center opacity-15">
-          <TrendingDown size={160} className="text-white" />
-        </div>
-        <div className="absolute bottom-0 left-0 right-0 h-24"
-          style={{ background: "linear-gradient(to top, rgba(0,0,0,0.4), transparent)" }} />
+      {/* Portada REAL y overlay oscuro */}
+      <div className="relative h-56 shrink-0 overflow-hidden bg-cover bg-center"
+        style={{ backgroundImage: "url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQi5idzoSkULV5H_F8iCx1FTGuqSOBhAnIorj_-fxX8HmA_l6iaSideVRsK&s=10')" }}>
+        {/* Overlay oscuro para garantizar contraste */}
+        <div className="absolute inset-0 bg-black/50 z-0" />
 
-        {/* Botones top */}
-        <div className="absolute top-0 left-0 right-0 flex justify-between px-4 pt-5">
+        {/* Botones top (con fondo blanco sólido y texto oscuro para óptimo contraste) */}
+        <div className="absolute top-0 left-0 right-0 flex justify-between px-4 pt-5 z-10">
           <Link to="/aprende" search={{ tab: "noticias" }}
-            className="w-9 h-9 bg-gn-card rounded-full flex items-center justify-center text-slate-800 border border-[var(--gn-border-str)] cursor-pointer hover:scale-105 active:scale-95 transition">
+            className="w-9 h-9 bg-white hover:bg-slate-100 rounded-full flex items-center justify-center text-slate-800 shadow-md border border-slate-200 cursor-pointer hover:scale-105 active:scale-95 transition-all">
             <ArrowLeft size={18} />
           </Link>
           <div className="flex gap-2">
-            <button className="w-9 h-9 bg-gn-card rounded-full flex items-center justify-center text-slate-800 border border-[var(--gn-border-str)] cursor-pointer hover:scale-105 active:scale-95 transition">
+            <button className="w-9 h-9 bg-white hover:bg-slate-100 rounded-full flex items-center justify-center text-slate-800 shadow-md border border-slate-200 cursor-pointer hover:scale-105 active:scale-95 transition-all">
               <BookmarkPlus size={16} />
             </button>
-            <button className="w-9 h-9 bg-gn-card rounded-full flex items-center justify-center text-slate-800 border border-[var(--gn-border-str)] cursor-pointer hover:scale-105 active:scale-95 transition">
+            <button className="w-9 h-9 bg-white hover:bg-slate-100 rounded-full flex items-center justify-center text-slate-800 shadow-md border border-slate-200 cursor-pointer hover:scale-105 active:scale-95 transition-all">
               <Share2 size={16} />
             </button>
           </div>
         </div>
 
-        {/* Info sobre la imagen */}
-        <div className="absolute bottom-4 left-4 right-4">
+        {/* Info sobre la imagen (con etiquetas y textos contrastados) */}
+        <div className="absolute bottom-4 left-4 right-4 z-10">
           <div className="flex items-center gap-2 mb-2">
-            <span className="bg-gn-surface text-slate-900 text-[9px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full border border-[var(--gn-border-str)]">
+            <span className="bg-indigo-600 text-white border border-indigo-700 text-[10px] font-black uppercase tracking-wider px-2.5 py-0.5 rounded-full shadow-md">
               Noticia
             </span>
-            <span className="flex items-center gap-1 text-white/80 text-[10px] font-medium">
-              <Clock size={10} /> 2 min · Lima, Perú
+            <span className="flex items-center gap-1 text-white text-[10px] font-bold drop-shadow-md">
+              <Clock size={11} /> 2 min · Lima, Perú
             </span>
           </div>
-          <h1 className="text-white font-bold text-base leading-snug drop-shadow-md">
+          <h1 className="text-white font-extrabold text-base leading-snug drop-shadow-md">
             Lima reduce un 12% sus residuos sólidos este año
           </h1>
         </div>
@@ -106,6 +102,16 @@ function Noticia() {
           </p>
         </div>
 
+        {/* Botón de enlace original (Mock, no funcional) */}
+        <div className="my-5">
+          <button
+            onClick={() => alert("Redirección simulada: Esta acción te llevaría a la noticia completa en la web oficial del MINAM.")}
+            className="w-full flex items-center justify-center gap-2 bg-[#1565c0] hover:bg-[#0d47a1] text-white text-xs font-bold py-3 px-4 rounded-xl shadow-md hover:scale-[1.01] active:scale-[0.99] transition-all cursor-pointer"
+          >
+            <ExternalLink size={14} /> Leer noticia original en web del MINAM
+          </button>
+        </div>
+
         {/* Datos clave */}
         <h2 className="font-bold text-[var(--gn-base)] text-sm mb-3 mt-5 flex items-center gap-2">
           <Recycle size={14} className="text-[var(--gn-primary-dk)]" /> Datos clave
@@ -140,7 +146,7 @@ function Noticia() {
             { title: "Nueva ley de envases retornables en Perú", tag: "Política", mins: "3" },
             { title: "Cifras del reciclaje en Lima Metropolitana", tag: "Ciencia", mins: "4" },
           ].map((n, i) => (
-            <button key={i} className="bg-gn-card border border-[#c5cae9] rounded-xl p-3 flex items-center justify-between shadow-sm hover:shadow-md transition-all">
+            <button key={i} className="bg-gn-card border border-[#c5cae9] rounded-xl p-3 flex items-center justify-between shadow-sm hover:shadow-md transition-all cursor-pointer hover:bg-[var(--gn-surface)]/40 hover:scale-[1.01] active:scale-[0.99] text-left">
               <div>
                 <span className="text-[9px] font-bold uppercase text-[#1565c0] bg-[#e8eaf6] px-2 py-0.5 rounded-full border border-[#c5cae9]">{n.tag}</span>
                 <p className="text-[12px] font-bold text-[#1a237e] mt-1">{n.title}</p>

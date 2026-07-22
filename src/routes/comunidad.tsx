@@ -66,7 +66,7 @@ function Comunidad() {
 
   return (
     <div className="max-w-md mx-auto h-screen bg-[var(--gn-bg)] text-[var(--gn-base)] relative flex flex-col shadow-2xl overflow-hidden">
-      
+
       {/* 1. Top Tabs (Segmented Control Rediseñado - Heurística #8) */}
       <div className="pt-12 pb-3 px-4 bg-[var(--gn-bg)] border-b border-[var(--gn-border)] z-10 shrink-0 shadow-sm">
         <div className="flex bg-[var(--gn-surface)] border border-[var(--gn-border-str)]/50 rounded-2xl p-1 gap-1 w-full shadow-inner">
@@ -80,11 +80,10 @@ function Comunidad() {
               <button
                 key={key}
                 onClick={() => setTab(key)}
-                className={`flex-1 text-center py-2 rounded-xl text-xs font-black transition-all cursor-pointer ${
-                  active
-                    ? "bg-[var(--gn-primary)] text-white shadow-md scale-[1.01]"
-                    : "text-[var(--gn-sub)] hover:bg-[var(--gn-card)]/50"
-                }`}
+                className={`flex-1 text-center py-2 rounded-xl text-xs font-black transition-all cursor-pointer ${active
+                  ? "bg-[var(--gn-primary)] text-white shadow-md scale-[1.01]"
+                  : "text-[var(--gn-sub)] hover:bg-[var(--gn-card)]/50"
+                  }`}
               >
                 {label}
               </button>
@@ -105,90 +104,128 @@ function Comunidad() {
 function RankingTab() {
   return (
     <div className="flex-1 overflow-y-auto scrollbar-hide pb-24">
+
       {/* 3. Tarjeta 1: Meta colectiva */}
       <section className="mt-6 mx-4 bg-gn-card border border-[var(--gn-border-str)] rounded-3xl p-6 flex flex-col items-center relative overflow-hidden shadow-lg">
         {/* Cabecera */}
         <h2 className="text-xl font-bold text-[var(--gn-base)] mb-6 text-center">Meta colectiva</h2>
-        
-        {/* Bloque Central (Totalmente alineado al centro) */}
+
+        {/* Bloque Central */}
         <div className="flex flex-col items-center gap-3 w-full">
-          {/* Nuevo Ícono: ecológico y visible (Mundo) */}
           <Globe2 className="w-16 h-16 text-[var(--gn-primary)] drop-shadow-[0_0_15px_rgba(16,185,129,0.3)] animate-pulse" />
-          
-          {/* Porcentaje gigante justo DEBAJO del nuevo ícono */}
+
+          {/* Porcentaje */}
           <p className="text-5xl font-black text-[var(--gn-base)] tracking-tight">62%</p>
-          
+
           {/* Barra de progreso */}
           <div className="w-full max-w-xs h-3 bg-[var(--gn-surface)] rounded-full overflow-hidden relative border border-[var(--gn-bg)]">
-            <div 
-              className="h-full bg-[var(--gn-primary)] rounded-full shadow-[0_0_10px_rgba(16,185,129,0.5)]" 
+            <div
+              className="h-full bg-[var(--gn-primary)] rounded-full shadow-[0_0_10px_rgba(16,185,129,0.5)]"
               style={{ width: "62%" }}
             />
           </div>
-          
-          {/* Texto descriptivo */}
-          <p className="text-sm text-[var(--gn-base)] mt-1 text-center font-medium">CO2 evitado por todos:</p>
-          {/* Cifra destacada */}
-          <p className="text-2xl font-bold text-[var(--gn-primary)] text-center drop-shadow-[0_0_6px_rgba(16,185,129,0.2)]">90,620 kg</p>
+
+          {/* Texto descriptivo actualizado */}
+          <p className="text-sm text-[var(--gn-base)] mt-1 text-center font-medium">
+            Kilos de residuos reciclados:
+          </p>
+          <p className="text-2xl font-bold text-[var(--gn-primary)] text-center drop-shadow-[0_0_6px_rgba(16,185,129,0.2)]">
+            310 kg
+          </p>
+
+          {/* Bloque de recompensa */}
+          <div className="bg-emerald-50 rounded-xl p-3 mt-2 text-center border border-emerald-100 w-full">
+            <p className="text-sm text-emerald-800 font-medium leading-snug">
+              <span className="font-bold">Al llegar al 100%:</span> Todos los participantes recibirán <span className="font-bold">+500 GPts</span>.
+            </p>
+          </div>
         </div>
 
         {/* Pie de tarjeta */}
-        <div className="w-full mt-6 pt-4 border-t border-[var(--gn-border-str)]/80 flex justify-between items-center">
-          {/* Lado Izquierdo (Participantes) */}
+        <div className="w-full mt-5 pt-4 border-t border-[var(--gn-border-str)]/80 flex justify-between items-center">
           <div className="flex items-center gap-2">
             <Users className="text-[var(--gn-sub)] w-5 h-5 shrink-0" />
-            <span className="text-xs text-[var(--gn-base)] font-medium">2,500 participantes</span>
+            <span className="text-xs text-[var(--gn-base)] font-medium">100 participantes</span>
           </div>
-          {/* Lado Derecho (Faltante) */}
           <div className="flex items-center gap-2">
             <Leaf className="text-[var(--gn-primary)] w-4 h-4 shrink-0" />
-            <span className="text-xs text-[var(--gn-base)] font-medium">Faltan 29,380 kg</span>
+            <span className="text-xs text-[var(--gn-base)] font-medium">Faltan 190 kg</span>
           </div>
         </div>
       </section>
 
       {/* 4. Tarjeta 2: Ranking Semanal */}
-      <section className="mt-6 mx-4 bg-gn-card border border-[var(--gn-border-str)] rounded-3xl p-5 shadow-lg mb-6">
+      <section className="mt-6 mx-4 bg-gn-card border border-[var(--gn-border-str)] rounded-3xl p-5 shadow-lg mb-2">
         <h2 className="text-lg font-bold mb-4">Ranking Semanal</h2>
-        
+
         {/* Lista del Podio */}
         <div className="flex flex-col gap-4">
-          
-          {/* Fila 1 (1er Lugar) */}
+
+          {/* Fila 1 — 1er Lugar */}
           <div className="flex items-center gap-4">
             <Trophy className="text-yellow-400 w-8 h-8 shrink-0 drop-shadow-[0_0_8px_rgba(250,204,21,0.4)]" />
             <div className="bg-[var(--gn-surface)] p-2 rounded-full shrink-0 flex items-center justify-center w-9 h-9 border border-[var(--gn-border-str)]">
               <User size={18} className="text-[var(--gn-sub)]" />
             </div>
             <span className="text-sm font-bold text-[var(--gn-base)] flex-1 truncate">Mario</span>
-            <span className="text-sm font-medium text-[var(--gn-primary)] shrink-0">12,150 kg</span>
+            <span className="text-sm font-bold text-emerald-600 shrink-0">12,150 GPts</span>
           </div>
 
-          {/* Fila 2 (2do Lugar) */}
+          {/* Fila 2 — 2do Lugar */}
           <div className="flex items-center gap-4">
             <Trophy className="text-[var(--gn-sub)] w-8 h-8 shrink-0 drop-shadow-[0_0_8px_rgba(203,213,225,0.4)]" />
             <div className="bg-[var(--gn-surface)] p-2 rounded-full shrink-0 flex items-center justify-center w-9 h-9 border border-[var(--gn-border-str)]">
               <User size={18} className="text-[var(--gn-sub)]" />
             </div>
             <span className="text-sm font-bold text-[var(--gn-base)] flex-1 truncate">Nicole</span>
-            <span className="text-sm font-medium text-[var(--gn-primary)] shrink-0">10,430 kg</span>
+            <span className="text-sm font-bold text-emerald-600 shrink-0">10,430 GPts</span>
           </div>
 
-          {/* Fila 3 (3er Lugar) */}
+          {/* Fila 3 — 3er Lugar */}
           <div className="flex items-center gap-4">
             <Trophy className="text-[var(--gn-amber)] w-8 h-8 shrink-0 drop-shadow-[0_0_8px_rgba(217,119,6,0.4)]" />
             <div className="bg-[var(--gn-surface)] p-2 rounded-full shrink-0 flex items-center justify-center w-9 h-9 border border-[var(--gn-border-str)]">
               <User size={18} className="text-[var(--gn-sub)]" />
             </div>
             <span className="text-sm font-bold text-[var(--gn-base)] flex-1 truncate">Renzo</span>
-            <span className="text-sm font-medium text-[var(--gn-primary)] shrink-0">9,890 kg</span>
+            <span className="text-sm font-bold text-emerald-600 shrink-0">9,890 GPts</span>
           </div>
 
         </div>
+
+        {/* Separador */}
+        <div className="border-t border-slate-200 my-4" />
+
+        {/* Tu posición */}
+        <div className="bg-emerald-50/60 border border-emerald-100 rounded-2xl p-3 flex items-center gap-3">
+          {/* Posición */}
+          <span className="text-xs font-black text-emerald-800 shrink-0 bg-emerald-100 px-2 py-1 rounded-lg border border-emerald-200">
+            #42
+          </span>
+
+          {/* Avatar + Nombre */}
+          <div className="flex items-center gap-2 flex-1 min-w-0">
+            <div className="bg-[var(--gn-surface)] p-1.5 rounded-full shrink-0 flex items-center justify-center w-8 h-8 border border-[var(--gn-border-str)]">
+              <User size={14} className="text-[var(--gn-primary)]" />
+            </div>
+            <span className="text-sm font-bold text-[var(--gn-base)] truncate">Khalep</span>
+          </div>
+
+          {/* GPts */}
+          <span className="text-sm font-bold text-emerald-600 shrink-0">2,450 GPts</span>
+        </div>
+
+        {/* Mensaje motivacional */}
+        <p className="text-xs text-slate-500 text-center mt-2.5 leading-snug">
+          ¡Estás a solo <span className="font-bold text-emerald-600">300 GPts</span> de entrar al Top 40!
+        </p>
       </section>
+
     </div>
   );
 }
+
+
 
 function ReportesTab() {
   return (
@@ -220,12 +257,42 @@ function ReportesTab() {
           <text x="225" y="108" fill="#44735c" className="text-[6px] font-bold tracking-wide uppercase opacity-70">Ca. Los Diamantes</text>
         </svg>
 
-        {/* Pin de ubicación rojo en el centro */}
+        {/* Pin principal — Punto crítico (rojo) */}
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-10">
           <div className="relative">
             <span className="absolute inset-0 rounded-full bg-[#f87171] opacity-35 animate-ping" />
             <div className="relative w-10 h-10 rounded-full bg-[#f87171] flex items-center justify-center shadow-[0_0_15px_rgba(239,68,68,0.7)] ring-2 ring-white/10">
               <MapPin size={22} className="text-white animate-bounce" />
+            </div>
+          </div>
+        </div>
+
+        {/* Pin 2 — Esquina superior izquierda (naranja, menor severidad) */}
+        <div className="absolute top-4 left-8 z-10">
+          <div className="relative">
+            <span className="absolute inset-0 rounded-full bg-orange-400 opacity-25 animate-ping" />
+            <div className="w-7 h-7 rounded-full bg-orange-500 flex items-center justify-center shadow-[0_0_8px_rgba(249,115,22,0.5)] ring-1 ring-white/20">
+              <MapPin size={13} className="text-white" />
+            </div>
+          </div>
+        </div>
+
+        {/* Pin 3 — Parte inferior derecha (naranja, en espera) */}
+        <div className="absolute bottom-10 right-12 z-10">
+          <div className="relative">
+            <span className="absolute inset-0 rounded-full bg-orange-400 opacity-25 animate-ping" style={{ animationDelay: "0.4s" }} />
+            <div className="w-7 h-7 rounded-full bg-orange-500 flex items-center justify-center shadow-[0_0_8px_rgba(249,115,22,0.5)] ring-1 ring-white/20">
+              <MapPin size={13} className="text-white" />
+            </div>
+          </div>
+        </div>
+
+        {/* Pin 4 — Zona superior derecha (naranja) */}
+        <div className="absolute top-12 right-10 z-10">
+          <div className="relative">
+            <span className="absolute inset-0 rounded-full bg-orange-400 opacity-25 animate-ping" style={{ animationDelay: "0.8s" }} />
+            <div className="w-7 h-7 rounded-full bg-orange-500 flex items-center justify-center shadow-[0_0_8px_rgba(249,115,22,0.5)] ring-1 ring-white/20">
+              <MapPin size={13} className="text-white" />
             </div>
           </div>
         </div>
@@ -261,9 +328,9 @@ function ReportesTab() {
         <h3 className="text-center text-xs font-bold uppercase tracking-wider text-[var(--gn-sub)]">
           Impacto colectivo
         </h3>
-        
+
         <div className="grid grid-cols-2 gap-4">
-          {/* Dato 1: Vecinos */}
+          {/* Dato 1: Vecinos activos — sin cambio */}
           <div className="flex flex-col bg-[var(--gn-bg)] border border-[var(--gn-border-str)]/60 rounded-2xl p-3.5 hover:scale-[1.03] transition-transform duration-300 shadow-inner">
             <div className="flex justify-between items-start">
               <div className="p-2 bg-[var(--gn-primary)] rounded-lg text-white">
@@ -277,41 +344,37 @@ function ReportesTab() {
             <p className="text-[10px] text-slate-600 font-semibold mt-1">Vecinos activos</p>
           </div>
 
-          {/* Dato 2: Toneladas */}
+          {/* Dato 2: Puntos resueltos */}
           <div className="flex flex-col bg-[var(--gn-bg)] border border-[var(--gn-border-str)]/60 rounded-2xl p-3.5 hover:scale-[1.03] transition-transform duration-300 shadow-inner">
             <div className="flex justify-between items-start">
               <div className="p-2 bg-[var(--gn-primary)] rounded-lg text-white">
-                <BarChart3 size={16} className="animate-pulse" />
+                <Crosshair size={16} />
               </div>
             </div>
-            <p className="text-2xl font-black font-mono text-slate-900 mt-3 leading-none tracking-tight">5.2<span className="text-xs font-bold text-slate-700 ml-0.5">T</span></p>
-            <p className="text-[10px] text-slate-600 font-semibold mt-1">Basura recogida</p>
-            {/* Pequeña barra CSS */}
-            <div className="h-1 bg-[var(--gn-bg)] rounded-full mt-2 w-full overflow-hidden border border-[var(--gn-card)]">
-              <div className="h-full bg-[var(--gn-primary)] rounded-full w-[70%] shadow-[0_0_6px_rgba(16,185,129,0.5)]" />
-            </div>
-          </div>
-
-          {/* Dato 3: CO2 Ahorrado */}
-          <div className="flex flex-col bg-[var(--gn-bg)] border border-[var(--gn-border-str)]/60 rounded-2xl p-3.5 hover:scale-[1.03] transition-transform duration-300 shadow-inner">
-            <div className="flex justify-between items-start">
-              <div className="p-2 bg-[var(--gn-primary)] rounded-lg text-white">
-                <Cloud size={16} />
-              </div>
-            </div>
-            <p className="text-xl font-black font-mono text-slate-900 mt-3 leading-none tracking-tight">1,240<span className="text-[10px] font-bold text-slate-700 ml-0.5">kg</span></p>
-            <p className="text-[10px] text-slate-600 font-semibold mt-1">CO₂ evitado en Callao</p>
-          </div>
-
-          {/* Dato 4: Puntos Resueltos */}
-          <div className="flex flex-col bg-[var(--gn-bg)] border border-[var(--gn-border-str)]/60 rounded-2xl p-3.5 hover:scale-[1.03] transition-transform duration-300 shadow-inner">
-            <div className="flex justify-between items-start">
-              <div className="p-2 bg-[var(--gn-primary)] rounded-lg text-white">
-                <Activity size={16} />
-              </div>
-            </div>
-            <p className="text-2xl font-black font-mono text-slate-900 mt-3 leading-none tracking-tight">18</p>
+            <p className="text-2xl font-black font-mono text-slate-900 mt-3 leading-none tracking-tight">25</p>
             <p className="text-[10px] text-slate-600 font-semibold mt-1">Puntos resueltos</p>
+          </div>
+
+          {/* Dato 3: Residuos retirados */}
+          <div className="flex flex-col bg-[var(--gn-bg)] border border-[var(--gn-border-str)]/60 rounded-2xl p-3.5 hover:scale-[1.03] transition-transform duration-300 shadow-inner">
+            <div className="flex justify-between items-start">
+              <div className="p-2 bg-[var(--gn-primary)] rounded-lg text-white">
+                <Trash2 size={16} />
+              </div>
+            </div>
+            <p className="text-xl font-black font-mono text-slate-900 mt-3 leading-none tracking-tight">320<span className="text-[10px] font-bold text-slate-700 ml-0.5">kg</span></p>
+            <p className="text-[10px] text-slate-600 font-semibold mt-1">Residuos retirados</p>
+          </div>
+
+          {/* Dato 4: Zonas recuperadas */}
+          <div className="flex flex-col bg-[var(--gn-bg)] border border-[var(--gn-border-str)]/60 rounded-2xl p-3.5 hover:scale-[1.03] transition-transform duration-300 shadow-inner">
+            <div className="flex justify-between items-start">
+              <div className="p-2 bg-[var(--gn-primary)] rounded-lg text-white">
+                <TreePine size={16} />
+              </div>
+            </div>
+            <p className="text-2xl font-black font-mono text-slate-900 mt-3 leading-none tracking-tight">4</p>
+            <p className="text-[10px] text-slate-600 font-semibold mt-1">Zonas recuperadas</p>
           </div>
         </div>
       </section>
@@ -366,11 +429,11 @@ function ReportesTab() {
 }
 
 function CamionesTab() {
-  const casas = [
+  const [casas, setCasas] = useState([
     { value: "diamantes_23", label: "Calle Los Diamantes 23", x: 290, y: 300, labelShort: "Diamantes 23" },
     { value: "sol_777", label: "Pasaje El Sol 777", x: 150, y: 115, labelShort: "Pje. El Sol 777" },
     { value: "ciro_104", label: "Av. Ciro Alegría 104", x: 175, y: 215, labelShort: "Ciro Alegría 104" },
-  ];
+  ]);
 
   const [casaSeleccionada, setCasaSeleccionada] = useState("");
   const [selectedDistance, setSelectedDistance] = useState<"100m" | "300m" | "500m">("300m");
@@ -380,6 +443,41 @@ function CamionesTab() {
 
   // Posición del Pin de Alarma (por defecto en Calle Los Diamantes / centro inferior)
   const [alarmPos, setAlarmPos] = useState({ x: 200, y: 338 });
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [newAddress, setNewAddress] = useState("");
+
+  const centrarMapa = () => {
+    setIsLocating(true);
+    setTimeout(() => {
+      setIsLocating(false);
+      setCasaSeleccionada("diamantes_23");
+      const diamantes = casas.find((c) => c.value === "diamantes_23");
+      if (diamantes) {
+        setAlarmPos({ x: diamantes.x, y: diamantes.y });
+      }
+      setPanOffset({ x: 0, y: 0 });
+    }, 500);
+  };
+
+  const handleSaveAddress = () => {
+    if (newAddress.trim()) {
+      const id = "dir_" + Date.now();
+      const newCasa = {
+        value: id,
+        label: newAddress,
+        x: 100 + Math.round(Math.random() * 200),
+        y: 100 + Math.round(Math.random() * 200),
+        labelShort: newAddress.length > 20 ? newAddress.slice(0, 17) + "..." : newAddress
+      };
+      setCasas((prev) => [...prev, newCasa]);
+      setCasaSeleccionada(id);
+      setAlarmPos({ x: newCasa.x, y: newCasa.y });
+      setPanOffset({ x: 0, y: 0 });
+      setNewAddress("");
+      setIsModalOpen(false);
+    }
+  };
 
   // --- Drag & Pan del Mapa ---
   const [isDragging, setIsDragging] = useState(false);
@@ -397,17 +495,17 @@ function CamionesTab() {
     { x: 10, y: 10, w: 80, h: 50, name: "Minka" },
     { x: 100, y: 10, w: 120, h: 50, name: "Almacenes" },
     { x: 230, y: 10, w: 160, h: 50, name: "Zona Ind." },
-    
+
     // Fila 2 (Entre Av. Argentina y Pje. El Sol)
     { x: 10, y: 85, w: 80, h: 60, name: "Residencial A" },
     { x: 100, y: 85, w: 100, h: 60, name: "Sector B-1" },
     { x: 210, y: 85, w: 180, h: 60, name: "C.C. Bellavista" },
-    
+
     // Fila 3 (Entre Pje. El Sol y Calle José Eguren)
     { x: 10, y: 165, w: 80, h: 70, name: "Sector B-2" },
     { x: 100, y: 165, w: 100, h: 70, name: "Colegio Callao" },
     { x: 210, y: 165, w: 180, h: 70, isPark: true, name: "Parque Santa Teresita" },
-    
+
     // Fila 4 (Entre Calle José Eguren y Calle Los Diamantes)
     { x: 10, y: 255, w: 80, h: 70, name: "Residencial C" },
     { x: 100, y: 255, w: 100, h: 70, name: "Mercado" },
@@ -558,9 +656,8 @@ function CamionesTab() {
       <div className="flex-1 bg-[#eef6f2] relative overflow-hidden">
         {/* Contenedor del Mapa en SVG - con soporte de Drag & Pan */}
         <svg
-          className={`absolute inset-0 w-full h-full select-none transition-[viewBox] duration-300 ease-out ${
-            isDragging ? "cursor-grabbing" : "cursor-grab"
-          }`}
+          className={`absolute inset-0 w-full h-full select-none transition-all duration-500 ease-in-out ${isDragging ? "cursor-grabbing" : "cursor-grab"
+            }`}
           viewBox={currentViewBox}
           preserveAspectRatio="xMidYMid slice"
           onClick={handleMapClick}
@@ -602,10 +699,10 @@ function CamionesTab() {
           {/* Rótulos de Calles / Avenidas */}
           {/* Av. Argentina */}
           <text x="200" y="73" textAnchor="middle" fill="#2d6a4a" className="text-[9px] font-black uppercase tracking-widest pointer-events-none select-none opacity-80">Av. Argentina</text>
-          
+
           {/* Pasaje El Sol */}
           <text x="150" y="154" textAnchor="middle" fill="#2d6a4a" className="text-[8px] font-bold pointer-events-none select-none opacity-75">Pje. El Sol</text>
-          
+
           {/* Calle José Eguren */}
           <text x="150" y="247" textAnchor="middle" fill="#2d6a4a" className="text-[8px] font-bold pointer-events-none select-none opacity-75">Ca. José Eguren</text>
 
@@ -614,7 +711,7 @@ function CamionesTab() {
 
           {/* Calles Verticales (Rotadas) */}
           <text x="92" y="290" transform="rotate(-90 92 290)" textAnchor="middle" fill="#2d6a4a" className="text-[8px] font-bold pointer-events-none select-none opacity-75">Ca. Ricardo Palma</text>
-          
+
           <text x="207" y="295" transform="rotate(-90 207 295)" textAnchor="middle" fill="#2d6a4a" className="text-[9px] font-black uppercase tracking-wider pointer-events-none select-none opacity-80">Av. Ciro Alegría</text>
 
           {/* Ruta Verde del Camión Recolector */}
@@ -664,12 +761,11 @@ function CamionesTab() {
           <g>
             <foreignObject x={alarmPos.x - 16} y={alarmPos.y - 16} width={32} height={32}>
               <div className="flex items-center justify-center h-full pointer-events-none">
-                <div 
-                  className={`w-7 h-7 rounded-full border-2 border-white flex items-center justify-center shadow-md transition-all duration-300 ${
-                    alarmActive 
-                      ? "bg-orange-500 scale-105 shadow-orange-500/20" 
-                      : "bg-orange-400 opacity-90"
-                  }`}
+                <div
+                  className={`w-7 h-7 rounded-full border-2 border-white flex items-center justify-center shadow-md transition-all duration-300 ${alarmActive
+                    ? "bg-orange-500 scale-105 shadow-orange-500/20"
+                    : "bg-orange-400 opacity-90"
+                    }`}
                 >
                   <Bell size={13} className="text-white" fill="currentColor" />
                 </div>
@@ -697,10 +793,10 @@ function CamionesTab() {
         {/* Botón Flotante Localizador */}
         <button
           type="button"
-          onClick={handleFixLocation}
+          onClick={centrarMapa}
           disabled={isLocating}
           className="absolute top-16 right-4 bg-gn-card border border-[var(--gn-border-str)] p-2.5 rounded-full shadow-lg hover:bg-gn-surface text-[var(--gn-primary)] hover:scale-105 transition-all duration-200 z-10 active:scale-95 disabled:opacity-50"
-          title="Fijar mi ubicación en Diamantes 23"
+          title="Centrar mapa en mi ubicación"
         >
           {isLocating ? (
             <Loader2 size={16} className="animate-spin text-[var(--gn-primary)]" />
@@ -748,9 +844,8 @@ function CamionesTab() {
 
         {/* 3. Panel de Control - Bottom Sheet Colapsable (Heurística #7 y #8) */}
         <div
-          className={`absolute bottom-16 w-full bg-gn-card border-t border-[var(--gn-border-str)] rounded-t-3xl z-20 shadow-[0_-8px_24px_rgba(13,61,34,0.15)] flex flex-col transition-transform duration-300 ease-in-out ${
-            isCollapsed ? "translate-y-[calc(100%-48px)]" : "translate-y-0"
-          }`}
+          className={`absolute bottom-16 w-full bg-gn-card border-t border-[var(--gn-border-str)] rounded-t-3xl z-20 shadow-[0_-8px_24px_rgba(13,61,34,0.15)] flex flex-col transition-transform duration-300 ease-in-out ${isCollapsed ? "translate-y-[calc(100%-48px)]" : "translate-y-0"
+            }`}
         >
           {/* Manija táctil – clic para colapsar/expandir */}
           <button
@@ -764,98 +859,147 @@ function CamionesTab() {
               {isCollapsed ? "▲ Mostrar panel" : "▼ Minimizar panel"}
             </span>
           </button>
-          <div className={`flex flex-col gap-3 px-5 pb-5 overflow-hidden transition-all duration-300 ${
-            isCollapsed ? "max-h-0 py-0" : "max-h-[600px]"
-          }`}>
+          <div className={`flex flex-col gap-3 px-5 pb-5 overflow-hidden transition-all duration-300 ${isCollapsed ? "max-h-0 py-0" : "max-h-[600px]"
+            }`}>
 
-          {/* Grilla de Tarjetas Inferiores */}
-          <div className="grid grid-cols-2 gap-3">
-            {/* Tarjeta 1: Mi Ubicación (Selector) */}
-            <div className="bg-[var(--gn-surface)] border border-[var(--gn-border-str)] rounded-2xl p-3 flex flex-col gap-1.5 shadow-sm">
-              <div className="flex items-center gap-1.5 text-[10px] font-bold text-[var(--gn-sub)] uppercase tracking-wider">
-                <MapPin size={13} className="text-blue-500 shrink-0" />
-                <span>Mi Hogar</span>
-              </div>
-              <Select value={casaSeleccionada || undefined} onValueChange={(val) => { setCasaSeleccionada(val === "none" ? "" : val); setPanOffset({ x: 0, y: 0 }); }}>
-                <SelectTrigger className="w-full h-8 bg-[var(--gn-card)] border-[var(--gn-border)] text-xs text-[var(--gn-base)] font-bold rounded-lg px-2 shadow-inner">
-                  <SelectValue placeholder="Selecciona tu hogar" />
-                </SelectTrigger>
-                <SelectContent className="bg-[var(--gn-card)] border-[var(--gn-border-str)] text-[var(--gn-base)]">
-                  <SelectItem value="none" className="text-xs font-semibold focus:bg-[var(--gn-surface)] cursor-pointer text-slate-400">
-                    Deseleccionar hogar
-                  </SelectItem>
-                  {casas.map((c) => (
-                    <SelectItem key={c.value} value={c.value} className="text-xs font-semibold focus:bg-[var(--gn-surface)] cursor-pointer">
-                      {c.labelShort}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-
-            {/* Tarjeta 2: Horario de Recojo */}
-            <div className="bg-[var(--gn-surface)] border border-[var(--gn-border-str)] rounded-2xl p-3 flex flex-col gap-1.5 shadow-sm">
-              <div className="flex items-center gap-1.5 text-[10px] font-bold text-[var(--gn-sub)] uppercase tracking-wider">
-                <Clock size={13} className="text-[var(--gn-primary)] shrink-0" />
-                <span>Horario Recojo</span>
-              </div>
-              <div className="text-xs font-black text-[var(--gn-base)] py-1 flex-1 flex items-center">
-                20:00 - 22:00
-              </div>
-            </div>
-
-            {/* Tarjeta 3: Configuración de Geocerca */}
-            <div className="bg-[var(--gn-surface)] border border-[var(--gn-border-str)] rounded-2xl p-3 flex flex-col gap-1.5 col-span-2 shadow-sm">
-              <div className="flex justify-between items-center text-[10px] font-bold text-[var(--gn-sub)] uppercase tracking-wider">
-                <div className="flex items-center gap-1.5">
-                  <Bell size={13} className="text-[var(--gn-amber)] shrink-0" />
-                  <span>Radio de Aviso Alarma</span>
+            {/* Grilla de Tarjetas Inferiores */}
+            <div className="grid grid-cols-2 gap-3">
+              {/* Tarjeta 1: Mi Ubicación (Selector) */}
+              <div className="bg-[var(--gn-surface)] border border-[var(--gn-border-str)] rounded-2xl p-3 flex flex-col gap-1.5 shadow-sm">
+                <div className="flex items-center gap-1.5 text-[10px] font-bold text-[var(--gn-sub)] uppercase tracking-wider">
+                  <MapPin size={13} className="text-blue-500 shrink-0" />
+                  <span>Mi Hogar</span>
                 </div>
-                <span className="text-[9px] font-extrabold bg-[var(--gn-amber)]/20 text-[var(--gn-amber)] px-1.5 py-0.5 rounded tracking-normal">
-                  {selectedDistance}
-                </span>
+                <Select
+                  value={casaSeleccionada || undefined}
+                  onValueChange={(val) => {
+                    if (val === "add_new") {
+                      setIsModalOpen(true);
+                    } else {
+                      setCasaSeleccionada(val === "none" ? "" : val);
+                      const selected = casas.find((c) => c.value === val);
+                      if (selected) {
+                        setAlarmPos({ x: selected.x, y: selected.y });
+                      }
+                      setPanOffset({ x: 0, y: 0 });
+                    }
+                  }}
+                >
+                  <SelectTrigger className="w-full h-8 bg-[var(--gn-card)] border-[var(--gn-border)] text-xs text-[var(--gn-base)] font-bold rounded-lg px-2 shadow-inner">
+                    <SelectValue placeholder="Selecciona tu hogar" />
+                  </SelectTrigger>
+                  <SelectContent className="bg-[var(--gn-card)] border-[var(--gn-border-str)] text-[var(--gn-base)]">
+                    <SelectItem value="none" className="text-xs font-semibold focus:bg-[var(--gn-surface)] cursor-pointer text-slate-400">
+                      Deseleccionar hogar
+                    </SelectItem>
+                    {casas.map((c) => (
+                      <SelectItem key={c.value} value={c.value} className="text-xs font-semibold focus:bg-[var(--gn-surface)] cursor-pointer">
+                        {c.labelShort}
+                      </SelectItem>
+                    ))}
+                    <SelectItem value="add_new" className="text-xs font-bold text-emerald-600 focus:bg-[var(--gn-surface)] cursor-pointer border-t border-[var(--gn-border-str)]/50 mt-1">
+                      Añadir nueva dirección...
+                    </SelectItem>
+                  </SelectContent>
+                </Select>
               </div>
-              {/* Chips de Selección de Distancia */}
-              <div className="flex bg-[var(--gn-card)] border border-[var(--gn-border)] rounded-xl p-0.5 gap-1 mt-1">
-                {(["100m", "300m", "500m"] as const).map((dist) => {
-                  const active = selectedDistance === dist;
-                  return (
-                    <button
-                      key={dist}
-                      type="button"
-                      onClick={() => setSelectedDistance(dist)}
-                      className={`py-1.5 flex-1 text-center rounded-lg text-xs font-extrabold transition-all cursor-pointer ${
-                        active
+
+              {/* Tarjeta 2: Horario de Recojo */}
+              <div className="bg-[var(--gn-surface)] border border-[var(--gn-border-str)] rounded-2xl p-3 flex flex-col gap-1.5 shadow-sm">
+                <div className="flex items-center gap-1.5 text-[10px] font-bold text-[var(--gn-sub)] uppercase tracking-wider">
+                  <Clock size={13} className="text-[var(--gn-primary)] shrink-0" />
+                  <span>Horario Recojo</span>
+                </div>
+                <div className="text-xs font-black text-[var(--gn-base)] py-1 flex-1 flex items-center">
+                  20:00 - 22:00
+                </div>
+              </div>
+
+              {/* Tarjeta 3: Configuración de Geocerca */}
+              <div className="bg-[var(--gn-surface)] border border-[var(--gn-border-str)] rounded-2xl p-3 flex flex-col gap-1.5 col-span-2 shadow-sm">
+                <div className="flex justify-between items-center text-[10px] font-bold text-[var(--gn-sub)] uppercase tracking-wider">
+                  <div className="flex items-center gap-1.5">
+                    <Bell size={13} className="text-[var(--gn-amber)] shrink-0" />
+                    <span>Radio de Aviso Alarma</span>
+                  </div>
+                  <span className="text-[9px] font-extrabold bg-[var(--gn-amber)]/20 text-[var(--gn-amber)] px-1.5 py-0.5 rounded tracking-normal">
+                    {selectedDistance}
+                  </span>
+                </div>
+                {/* Chips de Selección de Distancia */}
+                <div className="flex bg-[var(--gn-card)] border border-[var(--gn-border)] rounded-xl p-0.5 gap-1 mt-1">
+                  {(["100m", "300m", "500m"] as const).map((dist) => {
+                    const active = selectedDistance === dist;
+                    return (
+                      <button
+                        key={dist}
+                        type="button"
+                        onClick={() => setSelectedDistance(dist)}
+                        className={`py-1.5 flex-1 text-center rounded-lg text-xs font-extrabold transition-all cursor-pointer ${active
                           ? "bg-[var(--gn-primary)] text-white shadow border border-[var(--gn-primary-dk)]"
                           : "text-[var(--gn-sub)] hover:bg-[var(--gn-surface)]"
-                      }`}
-                    >
-                      {dist}
-                    </button>
-                  );
-                })}
+                          }`}
+                      >
+                        {dist}
+                      </button>
+                    );
+                  })}
+                </div>
               </div>
             </div>
-          </div>
 
-          {/* 5. Botón de Acción Principal (Toggle de Alarma) */}
-          <button
-            type="button"
-            onClick={handleToggleAlarm}
-            className={`text-white font-black py-3.5 rounded-xl w-full flex justify-center items-center gap-2 transition-all duration-300 active:scale-[0.98] shadow-md cursor-pointer ${
-              alarmActive
+            {/* 5. Botón de Acción Principal (Toggle de Alarma) */}
+            <button
+              type="button"
+              onClick={handleToggleAlarm}
+              className={`text-white font-black py-3.5 rounded-xl w-full flex justify-center items-center gap-2 transition-all duration-300 active:scale-[0.98] shadow-md cursor-pointer ${alarmActive
                 ? "bg-[var(--gn-coral)] hover:bg-orange-700 shadow-orange-500/20"
                 : "bg-[var(--gn-primary)] hover:bg-[var(--gn-primary-dk)] shadow-emerald-500/20"
-            }`}
-          >
-            <Bell size={16} className={alarmActive ? "animate-bounce" : ""} />
-            <span className="text-sm font-black uppercase tracking-wider">
-              {alarmActive ? "CANCELAR ALERTA ACTIVA" : "FIJAR PUNTO Y ACTIVAR"}
-            </span>
-          </button>
+                }`}
+            >
+              <Bell size={16} className={alarmActive ? "animate-bounce" : ""} />
+              <span className="text-sm font-black uppercase tracking-wider">
+                {alarmActive ? "CANCELAR ALERTA ACTIVA" : "FIJAR PUNTO Y ACTIVAR"}
+              </span>
+            </button>
           </div>
         </div>
       </div>
+
+      {/* Modal Personalizado para añadir dirección */}
+      {isModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm animate-in fade-in duration-200">
+          <div className="bg-white rounded-2xl p-6 w-[90%] max-w-sm shadow-xl animate-in zoom-in-95 duration-200">
+            <h3 className="text-lg font-bold text-slate-800 mb-2">Añadir nueva dirección</h3>
+            <input
+              type="text"
+              value={newAddress}
+              onChange={(e) => setNewAddress(e.target.value)}
+              placeholder="Ej. Av. Sáenz Peña 123..."
+              className="w-full border border-slate-300 rounded-xl px-4 py-3 outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-200 transition-all mb-4 text-slate-800"
+            />
+            <div className="flex gap-3">
+              <button
+                type="button"
+                onClick={() => {
+                  setIsModalOpen(false);
+                  setNewAddress("");
+                }}
+                className="text-slate-500 bg-slate-100 hover:bg-slate-200 py-2 rounded-xl flex-1 font-medium cursor-pointer"
+              >
+                Cancelar
+              </button>
+              <button
+                type="button"
+                onClick={handleSaveAddress}
+                className="text-white bg-emerald-600 hover:bg-emerald-700 py-2 rounded-xl flex-1 font-medium cursor-pointer"
+              >
+                Guardar
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
@@ -874,9 +1018,8 @@ function NavLink({
   return (
     <Link
       to={to}
-      className={`flex flex-col items-center gap-1 ${
-        active ? "text-[var(--gn-primary)]" : "text-[var(--gn-sub)]"
-      }`}
+      className={`flex flex-col items-center gap-1 ${active ? "text-[var(--gn-primary)]" : "text-[var(--gn-sub)]"
+        }`}
     >
       {icon}
       <span className="text-[10px] font-medium">{label}</span>

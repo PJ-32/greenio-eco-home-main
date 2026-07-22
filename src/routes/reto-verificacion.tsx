@@ -19,6 +19,7 @@ function RetoVerificacion() {
   const navigate = useNavigate();
   const [voted, setVoted] = useState<"si" | "no" | null>(null);
   const [showSuccess, setShowSuccess] = useState(false);
+  const [evidenciaAdjunta, setEvidenciaAdjunta] = useState(false);
 
   const handleVote = (type: "si" | "no") => {
     setVoted(type);
@@ -48,8 +49,8 @@ function RetoVerificacion() {
           </h1>
         </div>
 
-        <div className="bg-[var(--gn-amber)] border border-[var(--gn-amber)]/30 text-[var(--gn-amber)] text-[10px] font-bold px-2.5 py-1 rounded-full shrink-0 flex items-center gap-1 shadow-[0_0_8px_rgba(245,158,11,0.1)]">
-          <Sparkles size={10} className="animate-pulse" />
+        <div className="bg-orange-500 text-white px-3 py-1 rounded-full text-xs font-bold shrink-0 flex items-center gap-1 shadow-sm">
+          <Sparkles size={10} className="animate-pulse text-white" />
           <span>+10 GPts</span>
         </div>
       </header>
@@ -62,7 +63,7 @@ function RetoVerificacion() {
 
         {/* Tarjeta de Fotos */}
         <div className="bg-gn-card border border-[var(--gn-border-str)] rounded-2xl p-2.5 flex flex-col gap-3 relative shadow-inner">
-          
+
           {/* Foto ANTES */}
           <div className="relative h-40 rounded-xl overflow-hidden group border border-slate-850">
             <img
@@ -102,6 +103,23 @@ function RetoVerificacion() {
         <h2 className="font-bold text-center text-lg mb-5 text-[var(--gn-base)] tracking-tight">
           ¿El problema ha sido solucionado?
         </h2>
+
+        {/* Botón de Carga de Evidencia */}
+        <button
+          type="button"
+          onClick={() => setEvidenciaAdjunta(!evidenciaAdjunta)}
+          className={`w-full border-2 border-dashed py-3 rounded-xl flex items-center justify-center gap-2 mb-4 transition-colors cursor-pointer text-xs font-bold ${evidenciaAdjunta
+            ? "border-emerald-500 bg-emerald-50 text-emerald-700"
+            : "border-slate-300 bg-slate-50 text-slate-600 hover:bg-slate-100"
+            }`}
+        >
+          {evidenciaAdjunta ? (
+            <span>Evidencia adjuntada correctamente</span>
+          ) : (
+            <span>Subir foto de comprobación</span>
+          )}
+        </button>
+
         <div className="flex gap-4">
           {/* Botón NO */}
           <button
@@ -117,7 +135,11 @@ function RetoVerificacion() {
           <button
             type="button"
             onClick={() => handleVote("si")}
-            className="bg-[var(--gn-primary)] hover:bg-[#4ADE80] active:scale-95 text-[var(--gn-bg)] font-black py-3 px-4 rounded-xl flex-1 flex flex-col items-center justify-center gap-1 transition-all duration-300 cursor-pointer shadow-[0_4px_12px_rgba(16,185,129,0.3)] text-xs"
+            disabled={!evidenciaAdjunta}
+            className={`font-black py-3 px-4 rounded-xl flex-1 flex flex-col items-center justify-center gap-1 transition-all duration-300 text-xs ${evidenciaAdjunta
+              ? "bg-[var(--gn-primary)] hover:bg-[#4ADE80] active:scale-95 text-[var(--gn-bg)] cursor-pointer shadow-[0_4px_12px_rgba(16,185,129,0.3)]"
+              : "bg-slate-300 text-slate-500 opacity-50 cursor-not-allowed"
+              }`}
           >
             <CheckCircle2 size={20} />
             <span>Está limpio</span>
@@ -134,7 +156,7 @@ function RetoVerificacion() {
               <ShieldCheck size={32} className="text-[var(--gn-bg)] animate-bounce" />
             </div>
           </div>
-          
+
           <h2 className="text-xl font-black text-[var(--gn-base)] tracking-tight mb-2">
             ¡Voto registrado!
           </h2>

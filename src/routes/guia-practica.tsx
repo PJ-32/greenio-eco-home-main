@@ -2,7 +2,6 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import {
   ArrowLeft, Droplets, Clock, Share2, BookmarkPlus,
   CheckCircle2, Lightbulb, ChevronRight, Plus,
-  Home, BookOpen, Users, Award,
 } from "lucide-react";
 
 export const Route = createFileRoute("/guia-practica")({
@@ -25,39 +24,34 @@ function GuiaPractica() {
     <div className="max-w-md mx-auto h-screen relative overflow-hidden flex flex-col shadow-2xl"
       style={{ background: "linear-gradient(160deg, #e1f5fe 0%, #e0f2f1 50%, var(--gn-surface) 100%)" }}>
 
-      {/* Header con foto de portada simulada */}
-      <div className="relative h-48 shrink-0 overflow-hidden"
-        style={{ background: "linear-gradient(135deg, #0277bd 0%, #00897b 50%, var(--gn-primary-dk) 100%)" }}>
-        {/* Ícono decorativo grande */}
-        <div className="absolute inset-0 flex items-center justify-center opacity-20">
-          <Droplets size={140} className="text-white" />
-        </div>
-        {/* Gradiente inferior para legibilidad */}
-        <div className="absolute bottom-0 left-0 right-0 h-20"
-          style={{ background: "linear-gradient(to top, rgba(0,0,0,0.35), transparent)" }} />
+      {/* Header con foto de portada REAL y overlay oscuro */}
+      <div className="relative h-56 shrink-0 overflow-hidden bg-cover bg-center"
+        style={{ backgroundImage: "url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcScn4t5jK3rq8hDPeXjFQKB7fk0GZjCO5YrKSoaS9Rs-Tt_x1sfzPmRVJg&s=10')" }}>
+        {/* Overlay oscuro para garantizar contraste de texto e íconos */}
+        <div className="absolute inset-0 bg-black/50 z-0" />
 
-        {/* Botones top */}
-        <div className="absolute top-0 left-0 right-0 flex justify-between items-center px-4 pt-5">
+        {/* Botones top (con fondo blanco sólido y texto oscuro para óptimo contraste) */}
+        <div className="relative z-10 flex justify-between items-center px-4 pt-5">
           <Link to="/aprende" search={{ tab: "guias" }}
-            className="w-9 h-9 bg-gn-card rounded-full flex items-center justify-center text-slate-800 border border-[var(--gn-border-str)] cursor-pointer hover:scale-105 active:scale-95 transition">
+            className="w-9 h-9 bg-white hover:bg-slate-100 rounded-full flex items-center justify-center text-slate-800 shadow-md border border-slate-200 cursor-pointer hover:scale-105 active:scale-95 transition-all">
             <ArrowLeft size={18} />
           </Link>
           <div className="flex gap-2">
-            <button className="w-9 h-9 bg-gn-card rounded-full flex items-center justify-center text-slate-800 border border-[var(--gn-border-str)] cursor-pointer hover:scale-105 active:scale-95 transition">
+            <button className="w-9 h-9 bg-white hover:bg-slate-100 rounded-full flex items-center justify-center text-slate-800 shadow-md border border-slate-200 cursor-pointer hover:scale-105 active:scale-95 transition-all">
               <BookmarkPlus size={16} />
             </button>
-            <button className="w-9 h-9 bg-gn-card rounded-full flex items-center justify-center text-slate-800 border border-[var(--gn-border-str)] cursor-pointer hover:scale-105 active:scale-95 transition">
+            <button className="w-9 h-9 bg-white hover:bg-slate-100 rounded-full flex items-center justify-center text-slate-800 shadow-md border border-slate-200 cursor-pointer hover:scale-105 active:scale-95 transition-all">
               <Share2 size={16} />
             </button>
           </div>
         </div>
 
-        {/* Título sobre la imagen */}
-        <div className="absolute bottom-4 left-4 right-4">
-          <span className="inline-block bg-gn-surface text-slate-900 text-[9px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full border border-[var(--gn-border-str)] mb-2">
+        {/* Título sobre la imagen (con etiquetas y textos contrastados) */}
+        <div className="absolute bottom-4 left-4 right-4 z-10">
+          <span className="inline-block bg-sky-600 text-white border border-sky-700 text-[10px] font-black uppercase tracking-wider px-2.5 py-0.5 rounded-full shadow-md mb-2">
             Cuidado del Agua
           </span>
-          <h1 className="text-white font-bold text-base leading-snug drop-shadow-md">
+          <h1 className="text-white font-extrabold text-base leading-snug drop-shadow-md">
             5 formas fáciles de ahorrar agua en casa
           </h1>
         </div>
@@ -69,10 +63,10 @@ function GuiaPractica() {
         {/* Meta info */}
         <div className="flex items-center gap-4 mb-5">
           <span className="flex items-center gap-1.5 text-[11px] text-[var(--gn-sub)] font-medium">
-            <Clock size={13} className="text-[#0288d1]" /> 4 min de lectura
+            <Clock size={13} className="text-sky-600" /> 4 min de lectura
           </span>
           <span className="flex items-center gap-1.5 text-[11px] text-[var(--gn-sub)] font-medium">
-            <Droplets size={13} className="text-[#0288d1]" /> Ahorra hasta 3,140L/mes
+            <Droplets size={13} className="text-sky-600" /> Ahorra hasta 3,140L/mes
           </span>
         </div>
 
@@ -105,7 +99,7 @@ function GuiaPractica() {
         </h2>
         <div className="flex flex-col gap-3">
           {steps.map((step, i) => (
-            <div key={i} className="bg-gn-card border border-[#b3e5fc] rounded-2xl p-4 shadow-sm flex gap-3">
+            <div key={i} className="bg-gn-card border border-[#b3e5fc] rounded-2xl p-4 shadow-sm flex gap-3 hover:scale-[1.01] transition-transform duration-200">
               <div className="w-7 h-7 rounded-full flex items-center justify-center text-white text-xs font-bold shrink-0 mt-0.5 shadow-sm"
                 style={{ background: "linear-gradient(135deg, #0288d1, #00897b)" }}>
                 {i + 1}
@@ -142,7 +136,7 @@ function GuiaPractica() {
             { title: "Cómo compostar en casa", tag: "Hogar", mins: "5" },
             { title: "Guía de reciclaje por material", tag: "Residuos", mins: "3" },
           ].map((g, i) => (
-            <button key={i} className="bg-gn-card border border-[var(--gn-border)] rounded-xl p-3 flex items-center justify-between shadow-sm hover:shadow-md transition-all">
+            <button key={i} className="bg-gn-card border border-[var(--gn-border)] rounded-xl p-3 flex items-center justify-between shadow-sm hover:shadow-md transition-all cursor-pointer hover:bg-[var(--gn-surface)]/40 hover:scale-[1.01] active:scale-[0.99] text-left">
               <div>
                 <span className="text-[9px] font-bold uppercase text-[var(--gn-primary-dk)] bg-[var(--gn-surface)] px-2 py-0.5 rounded-full border border-[var(--gn-border-str)]">{g.tag}</span>
                 <p className="text-[12px] font-bold text-[var(--gn-base)] mt-1">{g.title}</p>
@@ -157,7 +151,7 @@ function GuiaPractica() {
       {/* CTA flotante */}
       <div className="absolute bottom-0 left-0 right-0 px-4 pb-5 pt-3 bg-gradient-to-t from-white/95 to-transparent">
         <Link to="/registra"
-          className="w-full flex items-center justify-center gap-2 text-white font-bold py-3.5 rounded-2xl shadow-lg active:scale-95 transition"
+          className="w-full flex items-center justify-center gap-2 text-white font-bold py-3.5 rounded-2xl shadow-lg active:scale-95 hover:opacity-95 transition cursor-pointer"
           style={{ background: "linear-gradient(135deg, var(--gn-primary-dk) 0%, #00897b 100%)" }}>
           <Plus size={18} strokeWidth={3} /> Registrar acción de agua
         </Link>

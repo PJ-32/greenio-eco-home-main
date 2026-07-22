@@ -7,6 +7,7 @@ import {
   Droplets,
   Recycle,
   ArrowRight,
+  ShieldCheck,
 } from "lucide-react";
 import ecoscanBg from "@/assets/ecoscan_bg.png";
 
@@ -81,7 +82,9 @@ function EcoScan() {
                 {/* Líquido/nivel interior de reciclado */}
                 <div className="absolute bottom-0 left-0 right-0 h-1/4 bg-[var(--gn-primary)]" />
                 <div className="w-5 h-3 bg-gn-surface absolute -top-0.5 border-b-2 border-[#4ADE80]/80 rounded-t-sm" />
-                <span className="text-[10px] text-[var(--gn-base)] font-bold tracking-wider">PET-1</span>
+                <span className="text-[8px] text-[var(--gn-base)] font-bold tracking-tight text-center leading-tight px-1 z-10">
+                  1 botella<br />PET-1
+                </span>
               </div>
               
               {/* VALIDACIÓN UX: Check verde animado */}
@@ -123,6 +126,19 @@ function EcoScan() {
 
         {/* Grid de Impacto */}
         <div className="grid grid-cols-2 gap-3">
+          {/* Material Verificado */}
+          <div className="bg-[var(--gn-bg)] border border-[var(--gn-border-str)]/80 rounded-xl p-3 flex items-center gap-3">
+            <div className="w-9 h-9 rounded-lg bg-[var(--gn-primary)] flex items-center justify-center text-white shrink-0">
+              <ShieldCheck size={18} />
+            </div>
+            <div className="min-w-0">
+              <p className="text-[9px] text-[var(--gn-base)] uppercase font-bold tracking-wider truncate">
+                Material verificado
+              </p>
+              <p className="text-xs font-bold text-[var(--gn-base)] mt-0.5">1 Envase PET</p>
+            </div>
+          </div>
+
           {/* CO2 */}
           <div className="bg-[var(--gn-bg)] border border-[var(--gn-border-str)]/80 rounded-xl p-3 flex items-center gap-3">
             <div className="w-9 h-9 rounded-lg bg-[var(--gn-primary)] flex items-center justify-center text-white shrink-0">
@@ -133,19 +149,6 @@ function EcoScan() {
                 CO2 evitado
               </p>
               <p className="text-xs font-bold text-[var(--gn-base)] mt-0.5">10g</p>
-            </div>
-          </div>
-
-          {/* Agua */}
-          <div className="bg-[var(--gn-bg)] border border-[var(--gn-border-str)]/80 rounded-xl p-3 flex items-center gap-3">
-            <div className="w-9 h-9 rounded-lg bg-[var(--gn-primary)] flex items-center justify-center text-white shrink-0">
-              <Droplets size={18} />
-            </div>
-            <div className="min-w-0">
-              <p className="text-[9px] text-[var(--gn-base)] uppercase font-bold tracking-wider truncate">
-                Agua conservada
-              </p>
-              <p className="text-xs font-bold text-[var(--gn-base)] mt-0.5">100ml</p>
             </div>
           </div>
         </div>

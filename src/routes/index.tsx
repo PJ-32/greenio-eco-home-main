@@ -41,7 +41,7 @@ function Index() {
     <div className="max-w-md mx-auto h-screen text-[var(--gn-base)] relative overflow-hidden flex flex-col shadow-2xl"
          style={{ background: "linear-gradient(160deg, var(--gn-bg) 0%, var(--gn-bg) 45%, var(--gn-bg) 100%)" }}>
 
-      <div className="flex-1 overflow-y-auto pb-24 pt-6 px-4 scrollbar-hide">
+      <div className="flex-1 overflow-y-auto pb-32 pt-6 px-4 scrollbar-hide">
 
         {/* 1. Header */}
         <header className="flex justify-between items-start">
@@ -214,6 +214,82 @@ function Index() {
                 <h3 className="text-xs font-bold text-[var(--gn-base)] leading-snug mt-1">
                   Lima reducirá plásticos en el mercado
                 </h3>
+              </article>
+            </Link>
+          </div>
+        </section>
+
+        {/* 5. Guías Prácticas */}
+        <section className="mt-8">
+          <div className="flex justify-between items-center mb-3">
+            <div>
+              <h2 className="font-bold text-sm text-[var(--gn-base)]">Guías Prácticas</h2>
+              <p className="text-[11px] text-[var(--gn-primary-dk)] font-medium mt-0.5">Hábitos sostenibles para tu día a día</p>
+            </div>
+            <Link to="/aprende" search={{ tab: "guias" }}
+              className="text-[11px] text-[var(--gn-primary-dk)] font-bold underline underline-offset-2 hover:text-[var(--gn-primary)] transition-colors cursor-pointer">
+              Ver todas
+            </Link>
+          </div>
+
+          <div className="flex gap-4 overflow-x-auto pb-4 pt-1 -mx-4 px-4 [&::-webkit-scrollbar]:hidden scroll-smooth">
+            {/* Tarjeta 1 — Agua */}
+            <Link to="/guia-practica" className="shrink-0 cursor-pointer hover:scale-[1.02] transition-transform duration-200 block">
+              <article className="bg-gn-card border border-[var(--gn-border-str)] rounded-2xl p-4 shadow-sm w-[260px] flex flex-col gap-2 hover:shadow-md transition-all">
+                <div className="flex justify-between items-center">
+                  <span className="bg-blue-50 text-blue-600 text-[10px] font-bold px-2.5 py-1 rounded-lg flex items-center gap-1 border border-blue-100">
+                    💧 AGUA
+                  </span>
+                  <span className="text-[10px] text-[var(--gn-hint)] flex items-center gap-1">
+                    <Clock size={10} /> 4 min
+                  </span>
+                </div>
+                <h3 className="text-[13px] font-bold text-[var(--gn-base)] leading-snug mt-0.5">
+                  5 formas fáciles de ahorrar agua en casa
+                </h3>
+                <p className="text-[10px] text-[var(--gn-sub)] leading-relaxed line-clamp-2">
+                  Pequeños cambios en tu rutina diaria pueden suponer un ahorro de más de 3,000 litros al mes.
+                </p>
+              </article>
+            </Link>
+
+            {/* Tarjeta 2 — Hogar */}
+            <Link to="/guia-practica" className="shrink-0 cursor-pointer hover:scale-[1.02] transition-transform duration-200 block">
+              <article className="bg-gn-card border border-[var(--gn-border-str)] rounded-2xl p-4 shadow-sm w-[260px] flex flex-col gap-2 hover:shadow-md transition-all">
+                <div className="flex justify-between items-center">
+                  <span className="bg-emerald-50 text-emerald-700 text-[10px] font-bold px-2.5 py-1 rounded-lg flex items-center gap-1 border border-emerald-100">
+                    🌱 HOGAR
+                  </span>
+                  <span className="text-[10px] text-[var(--gn-hint)] flex items-center gap-1">
+                    <Clock size={10} /> 6 min
+                  </span>
+                </div>
+                <h3 className="text-[13px] font-bold text-[var(--gn-base)] leading-snug mt-0.5">
+                  Cómo iniciar tu propio huerto urbano paso a paso
+                </h3>
+                <p className="text-[10px] text-[var(--gn-sub)] leading-relaxed line-clamp-2">
+                  Con una maceta, tierra abonada y luz natural puedes tener lechugas en casa en menos de 30 días.
+                </p>
+              </article>
+            </Link>
+
+            {/* Tarjeta 3 — Reciclaje */}
+            <Link to="/guia-practica" className="shrink-0 cursor-pointer hover:scale-[1.02] transition-transform duration-200 block">
+              <article className="bg-gn-card border border-[var(--gn-border-str)] rounded-2xl p-4 shadow-sm w-[260px] flex flex-col gap-2 hover:shadow-md transition-all">
+                <div className="flex justify-between items-center">
+                  <span className="bg-teal-50 text-teal-700 text-[10px] font-bold px-2.5 py-1 rounded-lg flex items-center gap-1 border border-teal-100">
+                    ♻️ RECICLAJE
+                  </span>
+                  <span className="text-[10px] text-[var(--gn-hint)] flex items-center gap-1">
+                    <Clock size={10} /> 3 min
+                  </span>
+                </div>
+                <h3 className="text-[13px] font-bold text-[var(--gn-base)] leading-snug mt-0.5">
+                  Cómo reciclar correctamente en Lima
+                </h3>
+                <p className="text-[10px] text-[var(--gn-sub)] leading-relaxed line-clamp-2">
+                  Conoce los colores oficiales de los tachos y los puntos de acopio más cercanos a tu hogar.
+                </p>
               </article>
             </Link>
           </div>
